@@ -2,14 +2,21 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import { Button, Container, Fab, TextField } from '@mui/material';
 import "../style/Login.css";
+import { useNavigate } from 'react-router-dom';
 
 const divStyle = {padding: 15, align: 'center', textAlign: 'center'};
+
 
 // var boxStyle = {padding: 15, align: 'center',  textAlign: 'center', backgroundColor: 'lightgray'};
 
 function Login() {
-   return <Box id='loginbox'>
+   const navigate = useNavigate();
 
+// react hook - navigate 
+   const onLoginClick = () => {navigate('/profile');}
+
+
+   return <Box id='loginbox'>
 
     <div id ='login-field' style ={divStyle}>
     
@@ -29,7 +36,7 @@ function Login() {
     </div>
 
 <div style={divStyle}>
-    <Button href="#text-buttons">Login</Button>
+    <Button onClick={onLoginClick}>Login</Button>
 </div>
 </Box>
 

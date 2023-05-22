@@ -8,6 +8,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Collapse from '@mui/material/Collapse';
 
 function Profile(){
+
     var name = "Jasmine"
 
     const style = {
