@@ -1,7 +1,19 @@
 import { AspectRatio, CenterFocusStrong, Margin } from "@mui/icons-material";
 import { Backdrop, Box, Button, Card, CardActions, CardContent, CardMedia, Divider, Fade, Grid, Modal, TextField, Typography } from "@mui/material"
 import { alignProperty } from "@mui/material/styles/cssUtils";
-import React from "react"
+import React, { useState } from "react"
+
+// const [count, setCount] = React.useState(0)
+
+// const handleIncrement = () =>{
+
+//     setCount(count+1)
+// }
+
+// const handleDecrement = () =>{
+
+//     setCount(count-1)
+// }
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -14,7 +26,6 @@ const style = {
     boxShadow: 24,
     p: 4,
   };
-
 
 export default function Post() {
     const [open, setOpen] = React.useState(false);

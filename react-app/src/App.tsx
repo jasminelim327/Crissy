@@ -17,7 +17,7 @@ function App (){
         <Route path="/profile" element={<Profile />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/Post" element={<Post />} />
-        
+
 
       </Routes>
   </Router>
