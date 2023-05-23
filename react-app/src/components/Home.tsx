@@ -18,13 +18,12 @@ function Home () {
         height: '100VH'
 
 };
-
  
     return (
 
     <>
     
-      <div className="cComponent" style={divStyle} >
+      <div className="Component" style={divStyle} >
       <Login2></Login2>
       </div>
      </>
