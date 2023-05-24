@@ -1,14 +1,15 @@
-import { AspectRatio, CenterFocusStrong, Margin } from "@mui/icons-material";
-import { Backdrop, Box, Button, Card, CardActions, CardContent, CardMedia, Divider, Fade, Grid, Modal, TextField, Typography } from "@mui/material"
-import { alignProperty } from "@mui/material/styles/cssUtils";
-import React, { useState } from "react"
+import { Backdrop, Box, Button, Fade, Grid, Modal, TextField, Typography } from "@mui/material"
+import React, { ReactElement, useEffect, useState } from "react"
+import PostItem from "./PostItem";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 // const [count, setCount] = React.useState(0)
 
 // const handleIncrement = () =>{
 
 //     setCount(count+1)
-// }
+// } 
 
 // const handleDecrement = () =>{
 
@@ -27,119 +28,98 @@ const style = {
     p: 4,
   };
 
+
+const userPosts = [
+    {
+        id: 1,
+        title: "Post 1",
+        content: "Lorem ipsum blablabla"
+    },
+    {
+        id: 2,
+        title: "Post 2",
+        content: "Lorem ipsum blablabla 2"
+    },
+    {
+        id: 3,
+        title: "Post 3",
+        content: "Lorem ipsum blablabla 3"
+    },
+    {
+        id: 4,
+        title: "Post 4",
+        content: "Lorem ipsum blablabla 4"
+    },
+    {
+        id: 5,
+        title: "Post 5",
+        content: "Lorem ipsum blablabla 5"
+    },
+]
+
+
+// const someObj: ObjectInterface = {
+//     a: 1, 
+//     b: 2,
+// }
+
+// interface ObjectInterface {
+//     a: number;
+//     b: number;
+// }
+
+// const sum = (obj: ObjectInterface) => {
+//     return obj.a + obj.b;
+// }
+
 export default function Post() {
     const [open, setOpen] = React.useState(false);
+    const navigate = useNavigate();
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+
+    const postItems: ReactElement[] = [];
+    const [posts, setPosts] = useState([]);
+    // useEffect(() => {
+    //   const fetch = async () => {
+    //     try {
+    //       const { data } = await axios.get(userPosts);
+    //       setPosts(data);
+    //     } catch (err) {
+    //       console.error(err);
+    //     }
+    //   };
+    //   fetch();
+    // }, []);
+    /**
+     * [{ id, title, content}, {id, title, ccontent}]
+     */
+    const numberArr: number[] = [];
+
+    // write for loop
+    // for (let i = 0; i < 10; i++) {
+    //     numberArr.push(i)
+    // }
+    
+
+    for (let i = 0; i < userPosts.length;  i++){
+      postItems.push(
+          <PostItem 
+          key={userPosts[i].id}
+          id={userPosts[i].id} 
+          title={userPosts[i].title} 
+          content={userPosts[i].content}
+          // on click event -> create a path to the individual post - jasmine
+          onClick={() => navigate('/post/' + userPosts[i].id)}
+          />)
+    }
 
     return (
 
         <>
 
         <Grid spacing={3} justifyContent="space-between" alignItems="center">
-        
-        <Card sx={{ maxWidth: 1000, alignItems:"center", justifyContent:"space-between" , margin:5}}>
-      
-      <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
-          Nice to meet everyone today
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          Hello everyone, Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aliquam, minima rem veritatis eum tenetur libero voluptas dignissimos eos mollitia commodi dolorum, non fugiat, consequuntur dicta ab debitis quidem ipsa adipisci?
-        </Typography>
-      </CardContent>
-      <CardActions>
-        <Button size="small">Share</Button>
-        <Button size="small">COMMENT</Button>
-        <Button size="small">Like</Button>
-
-      </CardActions>
-    </Card>
-
-    <Card sx={{ maxWidth: 1000, alignItems:"center", justifyContent:"space-between" , margin:5}}>
-      
-      <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
-          Nice to meet everyone today
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          Hello everyone, Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aliquam, minima rem veritatis eum tenetur libero voluptas dignissimos eos mollitia commodi dolorum, non fugiat, consequuntur dicta ab debitis quidem ipsa adipisci?
-        </Typography>
-      </CardContent>
-      <CardActions>
-        <Button size="small">Share</Button>
-        <Button size="small">COMMENT</Button>
-        <Button size="small">Like</Button>
-
-      </CardActions>
-    </Card>
-    <Card sx={{ maxWidth: 1000, alignItems:"center", justifyContent:"space-between" , margin:5}}>
-      
-      <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
-          Nice to meet everyone today
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          Hello everyone, Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aliquam, minima rem veritatis eum tenetur libero voluptas dignissimos eos mollitia commodi dolorum, non fugiat, consequuntur dicta ab debitis quidem ipsa adipisci?
-        </Typography>
-      </CardContent>
-      <CardActions>
-        <Button size="small">Share</Button>
-        <Button size="small">COMMENT</Button>
-        <Button size="small">Like</Button>
-
-      </CardActions>
-    </Card><Card sx={{ maxWidth: 1000, alignItems:"center", justifyContent:"space-between" , margin:5}}>
-      
-      <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
-          Nice to meet everyone today
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          Hello everyone, Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aliquam, minima rem veritatis eum tenetur libero voluptas dignissimos eos mollitia commodi dolorum, non fugiat, consequuntur dicta ab debitis quidem ipsa adipisci?
-        </Typography>
-      </CardContent>
-      <CardActions>
-        <Button size="small">Share</Button>
-        <Button size="small">COMMENT</Button>
-        <Button size="small">Like</Button>
-
-      </CardActions>
-    </Card><Card sx={{ maxWidth: 1000, alignItems:"center", justifyContent:"space-between" , margin:5}}>
-      
-      <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
-          Nice to meet everyone today
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          Hello everyone, Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aliquam, minima rem veritatis eum tenetur libero voluptas dignissimos eos mollitia commodi dolorum, non fugiat, consequuntur dicta ab debitis quidem ipsa adipisci?
-        </Typography>
-      </CardContent>
-      <CardActions>
-        <Button size="small">Share</Button>
-        <Button size="small">COMMENT</Button>
-        <Button size="small">Like</Button>
-
-      </CardActions>
-    </Card><Card sx={{ maxWidth: 1000, alignItems:"center", justifyContent:"space-between" , margin:5}}>
-      
-      <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
-          Nice to meet everyone today
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          Hello everyone, Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aliquam, minima rem veritatis eum tenetur libero voluptas dignissimos eos mollitia commodi dolorum, non fugiat, consequuntur dicta ab debitis quidem ipsa adipisci?
-        </Typography>
-      </CardContent>
-      <CardActions>
-        <Button size="small">Share</Button>
-        <Button size="small">COMMENT</Button>
-        <Button size="small">Like</Button>
-
-      </CardActions>
-    </Card>
-
-
+            {postItems}
         </Grid>
         
         

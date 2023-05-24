@@ -6,8 +6,10 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Profile from "./components/Profile";
 import SignUp from "./components/SignUp";
 import Post from "./components/Post";
+import PostItem from "./components/PostItem";
 
 
+// /post/1
 
 function App (){
   return <div>
@@ -17,6 +19,7 @@ function App (){
         <Route path="/profile" element={<Profile />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/Post" element={<Post />} />
+        <Route path="/post/:id" Component={PostItem} dynamic />
 
 
       </Routes>

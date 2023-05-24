@@ -1,0 +1,11 @@
+
+
+
+function PostTemplate(){
+ return{
+
+
+
+ }
+
+}export default PostTemplate
