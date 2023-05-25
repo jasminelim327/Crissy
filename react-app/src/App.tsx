@@ -7,6 +7,8 @@ import Profile from "./components/Profile";
 import SignUp from "./components/SignUp";
 import Post from "./components/Post";
 import PostItem from "./components/PostItem";
+import PostPage from "./components/PostPage";
+import NavBar from "./components/NavBar";
 
 
 // /post/1
@@ -19,7 +21,9 @@ function App (){
         <Route path="/profile" element={<Profile />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/Post" element={<Post />} />
-        <Route path="/post/:id" Component={PostItem} dynamic />
+        <Route path="/post/:id" Component={PostPage} dynamic />
+        <Route path="/navbar" element={<NavBar user={undefined}/>}  />
+
 
 
       </Routes>

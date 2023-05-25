@@ -24,7 +24,7 @@ export default function SignInSide() {
     const navigate = useNavigate();
      
      // react hook - navigate 
-    const onLoginClick = () => {navigate('/profile');}
+    const onLoginClick = () => {navigate('/post');}
      
   return (
     <Container component="main" maxWidth="lg">

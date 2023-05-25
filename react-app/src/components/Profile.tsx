@@ -17,6 +17,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
+import NavBar from "./NavBar";
 
 export default function Profile() {
   const [gender, setGender] = useState("");
@@ -32,6 +33,7 @@ export default function Profile() {
 
 
     <>
+    <NavBar></NavBar>
 
 <Grid container spacing={2}>
      

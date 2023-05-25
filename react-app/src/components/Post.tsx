@@ -3,6 +3,7 @@ import React, { ReactElement, useEffect, useState } from "react"
 import PostItem from "./PostItem";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import NavBar from "./NavBar";
 
 // const [count, setCount] = React.useState(0)
 
@@ -117,11 +118,13 @@ export default function Post() {
     return (
 
         <>
+        <NavBar >
+        </NavBar>
 
         <Grid spacing={3} justifyContent="space-between" alignItems="center">
             {postItems}
         </Grid>
-        
+    
         
         <div>
                 <Button  sx={{margin:5}} onClick={handleOpen}>Create A post</Button>

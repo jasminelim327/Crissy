@@ -2,21 +2,32 @@ import { Button, Card, CardActions, CardContent, Typography } from "@mui/materia
 import axios from "axios";
 import { MouseEventHandler, useEffect, useState } from "react";
 import { Navigate, useParams } from "react-router-dom";
+import LikeButton from "./LikeButton";
+import CommentSection from "./Comment Section";
 
 
 interface PostItemProps {
     id: number;
     title: string;
     content: string;
-    onClick: MouseEventHandler ;
+    onClick?: MouseEventHandler ;
   }
+
+const callback = () => {
+  console.log('hi')
+
+  return 5;
+}
+
+const foo = (bar: Function) => {
+  bar();
+}
+
+foo(callback); // foo(5)
 
 function PostItem(props: PostItemProps){
 
-    const [post, SetPost] = useState({});
-    const {id} = useParams();
-    const {title} = useParams();
-
+  const [showComment, setShowComment] = useState(false); 
     // useEffect(() => {
     //     const fetch = async () => {
     //       try {
@@ -29,11 +40,13 @@ function PostItem(props: PostItemProps){
     //     fetch();
     //   }, []);
 
+    const handleClick = () => {
+      setShowComment(!showComment)
+      console.log(showComment)
+    };
+
     return (
 <>
-    <h1>{id}</h1>
-    <h1>{title}</h1>
-
     <Card onClick={props.onClick}  
     sx={{ maxWidth: 1000, alignItems:"center", justifyContent:"space-between" , margin:5}}>
       
@@ -47,10 +60,15 @@ function PostItem(props: PostItemProps){
     </CardContent>
     <CardActions>
       <Button size="small">Share</Button>
-      <Button size="small">Comment</Button>
-      <Button size="small">Like</Button>
+
+      {/* comment to display list of comment when clicked */}
+      <Button size="small" onClick={handleClick}>Comment</Button>
+      <LikeButton />
 
     </CardActions>
+
+    { showComment ? <CommentSection /> : null}
+    { showComment && <CommentSection />}
   </Card>
 
     
@@ -58,5 +76,14 @@ function PostItem(props: PostItemProps){
     )
 
 
-} export default PostItem
+};
+
+
+// const CommentSection = () => {
+//   return <div>this is comment section</div>
+// };
+
+
+
+export default PostItem
 
