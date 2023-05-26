@@ -4,6 +4,7 @@ import PostItem from "./PostItem";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import NavBar from "./NavBar";
+import { PostItemProps } from "./PostItem";
 
 // const [count, setCount] = React.useState(0)
 
@@ -78,9 +79,35 @@ export default function Post() {
     const navigate = useNavigate();
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-
+    
     const postItems: ReactElement[] = [];
-    const [posts, setPosts] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [posts, setPosts] = useState<PostItemProps[]>([]);
+    const [error, setError] = useState();
+
+    useEffect(() => {
+        console.log("fetching data");
+        fetch("https://647087103de51400f7247096.mockapi.io/api/inspire2023/post")
+            .then(response => response.json())
+            .then(data => {
+                setPosts(data);
+                setIsLoading(false);
+            })
+            .catch(error => {
+                setError(error);
+                setIsLoading(false);
+            });
+
+    }, [])
+
+    
+    if (isLoading) {
+        return <div>Page is loading</div>;
+    }
+
+    if (error) {
+        return <div>There's an error</div>
+    }
     // useEffect(() => {
     //   const fetch = async () => {
     //     try {
@@ -95,7 +122,7 @@ export default function Post() {
     /**
      * [{ id, title, content}, {id, title, ccontent}]
      */
-    const numberArr: number[] = [];
+    // const numberArr: number[] = [];
 
     // write for loop
     // for (let i = 0; i < 10; i++) {
@@ -103,15 +130,15 @@ export default function Post() {
     // }
     
 
-    for (let i = 0; i < userPosts.length;  i++){
+    for (let i = 0; i < posts.length;  i++){
       postItems.push(
           <PostItem 
-          key={userPosts[i].id}
-          id={userPosts[i].id} 
-          title={userPosts[i].title} 
-          content={userPosts[i].content}
+          key={posts[i].id}
+          id={posts[i].id} 
+          title={posts[i].title} 
+          content={posts[i].content}
           // on click event -> create a path to the individual post - jasmine
-          onClick={() => navigate('/post/' + userPosts[i].id)}
+          onClick={() => navigate('/post/' + posts[i].id)}
           />)
     }
 

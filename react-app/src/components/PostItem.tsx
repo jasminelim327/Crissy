@@ -3,27 +3,17 @@ import axios from "axios";
 import { MouseEventHandler, useEffect, useState } from "react";
 import { Navigate, useParams } from "react-router-dom";
 import LikeButton from "./LikeButton";
-import CommentSection from "./Comment Section";
+import CommentSection from "./CommentSection";
 
 
-interface PostItemProps {
+export interface PostItemProps {
     id: number;
     title: string;
     content: string;
     onClick?: MouseEventHandler ;
   }
 
-const callback = () => {
-  console.log('hi')
 
-  return 5;
-}
-
-const foo = (bar: Function) => {
-  bar();
-}
-
-foo(callback); // foo(5)
 
 function PostItem(props: PostItemProps){
 
@@ -67,7 +57,7 @@ function PostItem(props: PostItemProps){
 
     </CardActions>
 
-    { showComment ? <CommentSection /> : null}
+    {/* { showComment ? <CommentSection /> : null} */}
     { showComment && <CommentSection />}
   </Card>
 
