@@ -2,7 +2,20 @@ import { ListItem, ListItemAvatar, Avatar, ListItemText, Typography } from "@mui
 import React from "react"
 import LikeButton from "./LikeButton"
 
-function Comment() {
+
+export interface CommentProps{
+
+    id: string,
+    username: string;
+    comment: string
+
+}
+
+function Comment(props: CommentProps) {
+
+    const id = props.id
+    const username = props.username
+    const comment = props.comment
 
     return(
 
@@ -17,7 +30,7 @@ function Comment() {
 
 
           <ListItemText
-            primary="Ali Connors"
+            primary= {username}
             secondary={
               <>
                 <Typography
@@ -28,14 +41,13 @@ function Comment() {
                 >
                   
                 </Typography>
-                {"great!!! "}
+                {comment}
                 <br />
                 <LikeButton />
               </>
             }
           />
         </ListItem>
-        
         
         
         

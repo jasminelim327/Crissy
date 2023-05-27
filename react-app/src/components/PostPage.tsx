@@ -15,7 +15,6 @@ const initialPost: PostItemProps = {
     content: ''
 } 
 
-
 const PostPage = () => {
 
     const { id } = useParams();

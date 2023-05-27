@@ -6,17 +6,6 @@ import axios from "axios";
 import NavBar from "./NavBar";
 import { PostItemProps } from "./PostItem";
 
-// const [count, setCount] = React.useState(0)
-
-// const handleIncrement = () =>{
-
-//     setCount(count+1)
-// } 
-
-// const handleDecrement = () =>{
-
-//     setCount(count-1)
-// }
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -60,20 +49,6 @@ const userPosts = [
 ]
 
 
-// const someObj: ObjectInterface = {
-//     a: 1, 
-//     b: 2,
-// }
-
-// interface ObjectInterface {
-//     a: number;
-//     b: number;
-// }
-
-// const sum = (obj: ObjectInterface) => {
-//     return obj.a + obj.b;
-// }
-
 export default function Post() {
     const [open, setOpen] = React.useState(false);
     const navigate = useNavigate();
@@ -108,27 +83,7 @@ export default function Post() {
     if (error) {
         return <div>There's an error</div>
     }
-    // useEffect(() => {
-    //   const fetch = async () => {
-    //     try {
-    //       const { data } = await axios.get(userPosts);
-    //       setPosts(data);
-    //     } catch (err) {
-    //       console.error(err);
-    //     }
-    //   };
-    //   fetch();
-    // }, []);
-    /**
-     * [{ id, title, content}, {id, title, ccontent}]
-     */
-    // const numberArr: number[] = [];
-
-    // write for loop
-    // for (let i = 0; i < 10; i++) {
-    //     numberArr.push(i)
-    // }
-    
+   
 
     for (let i = 0; i < posts.length;  i++){
       postItems.push(
@@ -145,7 +100,7 @@ export default function Post() {
     return (
 
         <>
-        <NavBar >
+        <NavBar user={undefined} >
         </NavBar>
 
         <Grid spacing={3} justifyContent="space-between" alignItems="center">
