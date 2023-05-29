@@ -9,6 +9,7 @@ import Post from "./components/Post";
 import PostItem from "./components/PostItem";
 import PostPage from "./components/PostPage";
 import NavBar from "./components/NavBar";
+import CommentSection from "./components/CommentSection";
 
 
 // /post/1
@@ -22,6 +23,7 @@ function App (){
         <Route path="/signup" element={<SignUp />} />
         <Route path="/Post" element={<Post />} />
         <Route path="/post/:id" Component={PostPage} dynamic />
+        <Route path="/post/:id/comment" Component={CommentSection} dynamic />
         <Route path="/navbar" element={<NavBar user={undefined}/>}  />
 
 

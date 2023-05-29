@@ -15,10 +15,12 @@ export default function App() {
 }
 
 function CommentSection(){
-    const { id } = useParams();
+    const { postId } = useParams();
+    // const { id } = useParams();
+
 
     const { isLoading, error, data } = useQuery('repoData', () =>
-    fetch(`https://647087103de51400f7247096.mockapi.io/api/inspire2023/comment/${id}`).then(res => res.json()
+    fetch(`https://647087103de51400f7247096.mockapi.io/api/inspire2023/post/${postId}/comment`).then(res => res.json()
     )
   )
 
@@ -32,7 +34,7 @@ return(
 
 <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
 
-    <Comment id={data.id} username={data.username} comment={data.comment} />
+    <Comment postId = {data.postId} id={data.id} username={data.username} comment={data.comment} />
               
 </List>
 

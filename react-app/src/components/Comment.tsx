@@ -4,7 +4,7 @@ import LikeButton from "./LikeButton"
 
 
 export interface CommentProps{
-
+    postId: string;
     id: string,
     username: string;
     comment: string
@@ -16,6 +16,7 @@ function Comment(props: CommentProps) {
     const id = props.id
     const username = props.username
     const comment = props.comment
+    const postId = props.postId
 
     return(
 
