@@ -22,11 +22,9 @@ function App (){
         <Route path="/profile" element={<Profile />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/Post" element={<Post />} />
-        <Route path="/post/:id" Component={PostPage} dynamic />
-        <Route path="/post/:id/comment" Component={CommentSection} dynamic />
+        <Route path="/post/:id" Component={PostPage} />
+        <Route path="/post/:id/comment" Component={CommentSection} />
         <Route path="/navbar" element={<NavBar user={undefined}/>}  />
-
-
 
       </Routes>
   </Router>

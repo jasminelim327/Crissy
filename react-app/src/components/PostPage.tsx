@@ -3,12 +3,6 @@ import PostItem, { PostItemProps } from "./PostItem";
 import { useEffect, useState } from "react";
 
 
-const post = {
-        id: 1,
-        title: "Post 1",
-        content: "Lorem ipsum blablabla"
-    };
-
 const initialPost: PostItemProps = {
     id: 0,
     title: '',
