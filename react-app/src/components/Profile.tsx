@@ -33,7 +33,7 @@ export default function Profile() {
 
 
     <>
-    <NavBar></NavBar>
+    <NavBar user={undefined}></NavBar>
 
 <Grid container spacing={2}>
      

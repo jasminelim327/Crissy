@@ -28,15 +28,12 @@ export default function SignInSide() {
      
   return (
     <Container component="main" maxWidth="lg">
-      <Box
-        sx={{
-          marginTop: 8,
-        }}
-      >
+      
         <Grid container>
           <CssBaseline />
           <Grid
             item
+            mt ={10}
             xs={false}
             sm={4}
             md={7}
@@ -53,13 +50,17 @@ export default function SignInSide() {
           />
           <Grid
             item
+            mt ={10}
             xs={12}
             sm={8}
             md={5}
+           
             component={Paper}
             elevation={6}
             square
           >
+
+        
             <Box
               sx={{
                 my: 8,
@@ -67,6 +68,7 @@ export default function SignInSide() {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
+              
               }}
             >
 
@@ -132,8 +134,11 @@ export default function SignInSide() {
               </Box>
             </Box>
           </Grid>
+          
         </Grid>
-      </Box>
+        
+ 
     </Container>
+    
   );
 }
