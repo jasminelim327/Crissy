@@ -1,46 +1,65 @@
-import React from "react";
+import { ImageListItem } from "@mui/material";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
+import crissLogo from "../assets/criss.svg";
 
-const NavBar = ({ user }) => {
+function NavBar(){
+
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const handleSidebarToggle = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
   return (
     <>
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark  sticky-top ">
-      <NavLink className="navbar-brand" to="/post">
-        Homepage Timeline
-      </NavLink>
-      <button
-        className="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span className="navbar-toggler-icon"></span>
-      </button>
+      <nav className="navbar navbar-expand-lg navbar-light bg-light sticky-top p-lg-2">
+        <button
+          className="navbar-toggler"
+          type="button"
+          onClick={handleSidebarToggle}
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button>
 
-      <div className="collapse navbar-collapse row" id="navbarColor03">
-        <ul className="navbar-nav mr-auto">
+        <div 
+          className={`collapse navbar-collapse ${
+            isSidebarOpen ? "show" : ""
+          } row`}
+          id="navbarColor03"
           
-          <li className="nav-item active">
-            <NavLink className="nav-link ml-3" to="/post">
-              Home
-            </NavLink>
-          </li>
-          
-          <li className="nav-item">
-            <NavLink className="nav-link ml-2" to="/profile">
-              Profile
-            </NavLink>
-          </li>
+        >
+          <ul className="navbar-nav">
+            <li className="nav-item">
+              <NavLink  
+                className="nav-link pl-2"
+                to="/post"
+                onClick={handleSidebarToggle
+                }
+                style={{ paddingLeft: '16px'}}
+              >
+                Home
+              </NavLink>
+            </li>
+            <li className="nav-item" >
+              <NavLink 
+                className="nav-link pl-10"
+                to="/profile"
+                onClick={handleSidebarToggle}
+                style={{ paddingLeft: '16px'}}
+              >
+                Profile
+              </NavLink>
+            </li>
+          </ul>
+        </div>
 
-        </ul>
-        
-        
-
-      </div>
-    </nav>
+        <NavLink className="navbar-brand" to="/post">
+          <img src ={crissLogo}
+            alt="Logo"
+            style={{ width: "30px", height: "30px", padding: 3 }}
+          />
+        </NavLink>
+      </nav>
     </>
   );
 };

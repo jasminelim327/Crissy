@@ -38,35 +38,56 @@ function PostItem(props: PostItemProps) {
           alignItems: "center",
           justifyContent: "space-between",
           margin: 5,
+          
         }}
       >
-        <CardContent>
+        <CardContent
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            paddingBottom: "0px",
+            borderBottom: "1px "
+          }}
+        >
+          <div>
+            <Typography variant="body2" color="text.secondary">
+              {props.username}
+            </Typography>
+          </div>
 
-        <Typography variant="body2" color="text.secondary">
-            {props.username}
-          </Typography>
 
-        <Typography variant="body2" color="text.secondary">
+          <Typography variant="body2" color="text.secondary">
             {formattedDate}
           </Typography>
 
-          <Typography display="inline-block" gutterBottom variant="h5" component="div" >
+          
+        </CardContent>
+
+        <CardContent>
+        <Typography
+            display="inline-block"
+            gutterBottom
+            variant="h5"
+            component="div"
+          >
             {props.title}
           </Typography>
 
           <Typography variant="body2" color="text.secondary">
             {props.content}
           </Typography>
-
         </CardContent>
         <CardActions>
           {/* <Button size="small">Share</Button> */}
 
           {/* comment to display list of comment when clicked */}
+          <LikeButton likes={props.likes} />
           <Button size="small" onClick={handleClick}>
             Comment
           </Button>
-          <LikeButton likes={props.likes} />
+          
         </CardActions>
 
         {/* { showComment ? <CommentSection /> : null} */}
