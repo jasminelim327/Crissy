@@ -12,6 +12,8 @@ export interface CommentProps {
   id: string;
   username: string;
   comment: string;
+  avatar: string;
+  likes: number;
 }
 
 function Comment(props: CommentProps) {
@@ -19,12 +21,14 @@ function Comment(props: CommentProps) {
   const username = props.username;
   const comment = props.comment;
   const postId = props.postId;
+  const avatar = props.avatar;
+  const likes = props.likes;
 
   return (
     <>
       <ListItem alignItems="flex-start">
         <ListItemAvatar>
-          <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+          <Avatar alt="" src={avatar} />
         </ListItemAvatar>
 
         <ListItemText
@@ -39,7 +43,7 @@ function Comment(props: CommentProps) {
               >{comment}
               </Typography>
               <br />
-              <LikeButton />
+              <LikeButton likes={likes} />
             </>
           }
         />

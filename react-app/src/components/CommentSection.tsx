@@ -1,6 +1,7 @@
 import { QueryClient, QueryClientProvider, useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import Comment from "./Comment";
+import { Key } from "react";
 
 const queryClient = new QueryClient();
 
@@ -26,18 +27,26 @@ function CommentSection() {
 
   return (
     <>
-
-{data.map((comment) => (
-      <Comment
-        key={comment.id}
-        postId={comment.postId}
-        id={comment.id}
-        username={comment.username}
-        comment={comment.comment}
-      />
-    ))}
-    
-    
+      {data.map(
+        (comment: {
+          id: Key | null | undefined;
+          postId: string;
+          username: string;
+          comment: string;
+          avatar: string;
+          likes: number;
+        }) => (
+          <Comment
+            key={comment.id}
+            postId={comment.postId}
+            id={comment.id}
+            username={comment.username}
+            comment={comment.comment}
+            avatar={comment.avatar}
+            likes={comment.likes}
+          />
+        )
+      )}
     </>
   );
 }

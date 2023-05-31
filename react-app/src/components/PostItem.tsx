@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Button,
   Card,
   CardActions,
@@ -15,15 +16,18 @@ export interface PostItemProps {
   title: string;
   content: string;
   onClick?: MouseEventHandler;
+  username: string;
+  likes: number;
+  createdAt: Date;
 }
 
 function PostItem(props: PostItemProps) {
   const [showComment, setShowComment] = useState(false);
-
   const handleClick = () => {
     setShowComment(!showComment);
     // console.log(showComment);
   };
+  const formattedDate = new Date(props.createdAt).toLocaleString();
 
   return (
     <>
@@ -37,21 +41,32 @@ function PostItem(props: PostItemProps) {
         }}
       >
         <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
+
+        <Typography variant="body2" color="text.secondary">
+            {props.username}
+          </Typography>
+
+        <Typography variant="body2" color="text.secondary">
+            {formattedDate}
+          </Typography>
+
+          <Typography display="inline-block" gutterBottom variant="h5" component="div" >
             {props.title}
           </Typography>
+
           <Typography variant="body2" color="text.secondary">
             {props.content}
           </Typography>
+
         </CardContent>
         <CardActions>
-          <Button size="small">Share</Button>
+          {/* <Button size="small">Share</Button> */}
 
           {/* comment to display list of comment when clicked */}
           <Button size="small" onClick={handleClick}>
             Comment
           </Button>
-          <LikeButton />
+          <LikeButton likes={props.likes} />
         </CardActions>
 
         {/* { showComment ? <CommentSection /> : null} */}

@@ -6,7 +6,10 @@ import { useEffect, useState } from "react";
 const initialPost: PostItemProps = {
     id: 0,
     title: '',
-    content: ''
+    content: '',
+    username: "",
+    likes: 0,
+    createdAt:  new Date(),
 } 
 
 const PostPage = () => {
@@ -30,7 +33,6 @@ const PostPage = () => {
         });
 
 }, [])
-
     
 if (isLoading) {
     return <div>Page is loading</div>;
@@ -41,9 +43,9 @@ if (error) {
 
 }
 
-    return <PostItem id={post.id} 
-    title={post.title} 
-    content={post.content} />;
+    return <PostItem id={post.id}
+    title={post.title}
+    content={post.content} username={post.username} likes={post.likes} createdAt={post.createdAt} />;
 }
 
 export default PostPage;

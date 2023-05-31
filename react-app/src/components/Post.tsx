@@ -66,9 +66,11 @@ export default function Post() {
         id={posts[i].id}
         title={posts[i].title}
         content={posts[i].content}
+        username={posts[i].username}
+        likes={posts[i].likes}
         // on click event -> create a path to the individual post - jasmine
-        onClick={() => navigate("/post/" + posts[i].id)}
-      />
+        onClick={() => navigate("/post/" + posts[i].id)} 
+        createdAt={posts[i].createdAt}      />
     );
   }
 
