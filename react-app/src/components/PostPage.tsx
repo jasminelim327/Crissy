@@ -9,7 +9,8 @@ const initialPost: PostItemProps = {
     content: '',
     username: "",
     likes: 0,
-    createdAt:  new Date(),
+    createdAt:  new Date()
+    ,
 } 
 
 const PostPage = () => {
@@ -32,7 +33,7 @@ const PostPage = () => {
             setIsLoading(false);
         });
 
-}, [])
+    }, [])
     
 if (isLoading) {
     return <div>Page is loading</div>;
@@ -42,7 +43,6 @@ if (error) {
     return <div>There's an error</div>
 
 }
-
     return <PostItem id={post.id}
     title={post.title}
     content={post.content} username={post.username} likes={post.likes} createdAt={post.createdAt} />;

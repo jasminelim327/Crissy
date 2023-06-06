@@ -1,19 +1,10 @@
-import {
-  Backdrop,
-  Box,
-  Button,
-  Fade,
-  Grid,
-  Modal,
-  TextField,
-  Typography,
-} from "@mui/material";
 import React, { ReactElement, useEffect, useState } from "react";
 import PostItem from "./PostItem";
 import { useNavigate } from "react-router-dom";
 import NavBar from "./NavBar";
 import { PostItemProps } from "./PostItem";
 import CreatePost from "./CreatePost";
+import { Grid } from "@mui/material";
 
 export default function Post() {
   const navigate = useNavigate();
@@ -27,7 +18,7 @@ export default function Post() {
     fetch("https://647087103de51400f7247096.mockapi.io/api/inspire2023/post")
       .then((response) => response.json())
       .then((data) => {
-        setPosts(data);
+        setPosts(data.reverse());
         setIsLoading(false);
       })
       .catch((error) => {
@@ -35,6 +26,10 @@ export default function Post() {
         setIsLoading(false);
       });
   }, []);
+
+  const handleCreatePost = (newPost: PostItemProps) => {
+    setPosts((prevPosts) => [newPost, ...prevPosts]);
+  };
 
   if (isLoading) {
     return <div>Page is loading</div>;
@@ -62,8 +57,8 @@ export default function Post() {
 
   return (
     <>
-      <NavBar user={undefined}></NavBar>
-      <CreatePost />
+      <NavBar></NavBar>
+      <CreatePost onCreate={handleCreatePost} />
       <Grid spacing={2} justifyContent="space-between" alignItems="center">
         {postItems}
       </Grid>

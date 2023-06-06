@@ -10,15 +10,19 @@ import axios from "axios";
 import { MouseEventHandler, useEffect, useState } from "react";
 import LikeButton from "./LikeButton";
 import CommentSection from "./CommentSection";
+import { useParams } from "react-router-dom";
 
-export interface PostItemProps {
+export interface PostItemProps extends PostItemBase {
   id: number;
+  onClick?: MouseEventHandler;
+  createdAt: Date;
+}
+
+export interface PostItemBase {
   title: string;
   content: string;
-  onClick?: MouseEventHandler;
   username: string;
   likes: number;
-  createdAt: Date;
 }
 
 function PostItem(props: PostItemProps) {
@@ -38,7 +42,6 @@ function PostItem(props: PostItemProps) {
           alignItems: "center",
           justifyContent: "space-between",
           margin: 5,
-          
         }}
       >
         <CardContent
@@ -48,7 +51,7 @@ function PostItem(props: PostItemProps) {
             justifyContent: "space-between",
             alignItems: "center",
             paddingBottom: "0px",
-            borderBottom: "1px "
+            borderBottom: "1px ",
           }}
         >
           <div>
@@ -57,16 +60,13 @@ function PostItem(props: PostItemProps) {
             </Typography>
           </div>
 
-
           <Typography variant="body2" color="text.secondary">
             {formattedDate}
           </Typography>
-
-          
         </CardContent>
 
         <CardContent>
-        <Typography
+          <Typography
             display="inline-block"
             gutterBottom
             variant="h5"
@@ -87,7 +87,6 @@ function PostItem(props: PostItemProps) {
           <Button size="small" onClick={handleClick}>
             Comment
           </Button>
-          
         </CardActions>
 
         {/* { showComment ? <CommentSection /> : null} */}

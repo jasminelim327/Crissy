@@ -1,7 +1,8 @@
-import { QueryClient, QueryClientProvider, useQuery } from "react-query";
+import { QueryClient, QueryClientProvider, useQuery, useMutation , useQueryClient} from "react-query";
 import { useParams } from "react-router-dom";
 import Comment from "./Comment";
 import { Key } from "react";
+import CreateComment from "./CreateComment";
 
 const queryClient = new QueryClient();
 
@@ -19,7 +20,46 @@ function CommentSection() {
     fetch(
       `https://647087103de51400f7247096.mockapi.io/api/inspire2023/post/${id}/comment`
     ).then((res) => res.json())
+
   );
+
+  const mutation = useMutation(
+    async (comment: string) => {
+      const requestOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          comment,
+        }),
+      };
+  
+      const response = await fetch(
+        `https://647087103de51400f7247096.mockapi.io/api/inspire2023/post/${id}/comment`,
+        requestOptions
+      );
+  
+      if (!response.ok) {
+        throw new Error("Failed to add comment");
+      }
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("repoData");
+      },
+    }
+  );
+
+  
+  const handleCommentSubmit = async (comment: string) => {
+    try {
+      await mutation.mutateAsync(comment);
+    } catch (error) {
+      console.error("Failed to add comment:", error);
+    }
+  };
+
 
   if (isLoading) return "Loading...";
 
@@ -47,6 +87,7 @@ function CommentSection() {
           />
         )
       )}
+      <CreateComment onSubmit={handleCommentSubmit}/>
     </>
   );
 }

@@ -30,10 +30,8 @@ export default function Profile() {
   ];
 
   return (
-
-
     <>
-    <NavBar user={undefined}></NavBar>
+    <NavBar></NavBar>
 
 <Grid container spacing={2}>
      
