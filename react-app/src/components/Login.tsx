@@ -10,21 +10,31 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { Container } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { auth } from "../backend/firebase"
+import { signInWithEmailAndPassword } from "firebase/auth"
 
-export default function SignInSide() {
-  const handleSubmit = (event: { preventDefault: () => void; currentTarget: HTMLFormElement | undefined; }) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+export default function LogIn() {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        console.log(userCredential);
+        console.log('User signed in successfully!');
+        // Redirect to homepage
+        navigate('/post');
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
+
     const navigate = useNavigate();
-     
      // react hook - navigate 
-    const onLoginClick = () => {navigate('/post');}
+    const onLoginClick = () => {handleSubmit()}
      
   return (
     <Container component="main" maxWidth="lg">
@@ -95,6 +105,9 @@ export default function SignInSide() {
                   name="email"
                   autoComplete="email"
                   autoFocus
+                  value = {email}
+                  onChange={(e)=> setEmail(e.target.value)
+                  }
                 />
                 <TextField
                   margin="normal"
@@ -105,13 +118,16 @@ export default function SignInSide() {
                   type="password"
                   id="password"
                   autoComplete="current-password"
+                  value = {password}
+                  onChange={(e)=> setPassword(e.target.value)
+                  }
                 />
                 <FormControlLabel
                   control={<Checkbox value="remember" color="primary" />}
                   label="Remember me"
                 />
                 <Button
-                  onClick={onLoginClick}
+                  onClick={handleSubmit}
                   type="submit"
                   fullWidth
                   variant="contained"

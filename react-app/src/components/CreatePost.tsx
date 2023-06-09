@@ -11,7 +11,6 @@ import {
 import React from "react";
 import { PostItemProps, PostItemBase } from "./PostItem";
 import { useLocation, useParams } from "react-router-dom";
-import { useQuery } from "react-query";
 
 interface CreatePostProps {
   onCreate: (newPost: PostItemProps) => void;
@@ -53,6 +52,7 @@ export default function CreatePost({ onCreate }: CreatePostProps) {
         
         setTitle("");
         setContent("");
+        handleClose()
         console.log(newPost);
       })
     
@@ -87,7 +87,6 @@ export default function CreatePost({ onCreate }: CreatePostProps) {
       </Button>
       <Modal
         // handlelclick then fetch
-
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         open={open}
