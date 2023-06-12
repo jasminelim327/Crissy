@@ -27,7 +27,7 @@ export default function LogIn() {
         navigate('/post');
       })
       .catch((error) => {
-        console.log(error);
+        alert(error);
       });
   };
 

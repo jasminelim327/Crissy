@@ -5,6 +5,7 @@ import Card from '@mui/material/Card';
 import CardActionArea from '@mui/material/CardActionArea';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
+import { CardActions, Button } from '@mui/material';
 
 interface FeaturedPostProps {
   post: {
@@ -20,31 +21,24 @@ export default function FeaturedPost(props: FeaturedPostProps) {
   const { post } = props;
 
   return (
-    <Grid item xs={12} md={6}>
-      <CardActionArea component="a" href="#">
-        <Card sx={{ display: 'flex' }}>
-          <CardContent sx={{ flex: 1 }}>
-            <Typography component="h2" variant="h5">
-              {post.title}
-            </Typography>
-            <Typography variant="subtitle1" color="text.secondary">
-              {post.date}
-            </Typography>
-            <Typography variant="subtitle1" paragraph>
-              {post.description}
-            </Typography>
-            <Typography variant="subtitle1" color="primary">
-              Continue reading...
-            </Typography>
-          </CardContent>
-          <CardMedia
-            component="img"
-            sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
-            image={post.image}
-            alt={post.imageLabel}
-          />
-        </Card>
-      </CardActionArea>
-    </Grid>
+    <Card sx={{ maxWidth: 345, mx:2,  md:4 }}>
+      <CardMedia
+        sx={{ height: 140 }}
+        image={post.image}
+        title={post.title}
+      />
+      <CardContent>
+        <Typography gutterBottom variant="h5" component="div">
+        {post.title}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          {post.description}
+        </Typography>
+      </CardContent>
+      {/* <CardActions>
+        <Button size="small">Share</Button>
+        <Button size="small">Learn More</Button>
+      </CardActions> */}
+    </Card>
   );
 }

@@ -37,10 +37,10 @@ export default function SignUp() {
     e.preventDefault();
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        console.log(userCredential);
+        alert('Successful Sign Up');
       })
       .catch((error) => {
-        console.log(error);
+        alert(error);
       });
   };
 

@@ -53,13 +53,13 @@ export default function MainFeaturedPost(props: MainFeaturedPostProps) {
             }}
           >
             <Typography component="h1" variant="h3" color="inherit" gutterBottom>
-              {post.title}
+              CRISSY 
             </Typography>
             <Typography variant="h5" color="inherit" paragraph>
-              {post.description}
+            Crissy is a dynamic and inclusive discussion platform designed to address and raise awareness about unconscious bias in the workplace. It provides a safe and supportive environment for individuals to engage in meaningful conversations, share personal experiences, and learn from one another. With a focus on fostering understanding and promoting positive change, Crissy empowers employees and organizations to challenge their biases and create more equitable and inclusive work environments.
             </Typography>
             <Link variant="subtitle1" href="#">
-              {post.linkText}
+            
             </Link>
           </Box>
         </Grid>

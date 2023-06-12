@@ -1,4 +1,3 @@
-import * as React from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
@@ -10,7 +9,6 @@ import Header from './Header';
 import MainFeaturedPost from './MainFeaturedPost';
 import FeaturedPost from './FeaturedPost';
 import Main from './Main';
-import Sidebar from './Sidebar';
 import Footer from './Footer';
 
 const sections = [
@@ -37,21 +35,28 @@ const mainFeaturedPost = {
 
 const featuredPosts = [
   {
-    title: 'Featured post',
-    date: 'Nov 12',
+    title: 'Dynamic Discussion Forums:',
     description:
-      'This is a wider card with supporting text below as a natural lead-in to additional content.',
-    image: 'https://source.unsplash.com/random?wallpapers',
+      "Crissy's dynamic discussion forums serve as a virtual meeting place where individuals can engage in open and respectful conversations about unconscious bias in the workplace. These forums provide a platform for users to share their experiences, perspectives, and insights, fostering a sense of community and understanding. Whether it's discussing the impact of gender bias in hiring practices or addressing the challenges of racial bias in promotions, Crissy's discussion forums empower individuals to learn from one another, challenge their own biases, and collectively work towards creating more inclusive workplaces..",
+    image: 'https://source.unsplash.com/random?wallpaper',
     imageLabel: 'Image Text',
   },
   {
-    title: 'Post title',
+    title: 'Community-Driven Stories and Case Studies',
     date: 'Nov 11',
     description:
-      'This is a wider card with supporting text below as a natural lead-in to additional content.',
-    image: 'https://source.unsplash.com/random?wallpapers',
+     "Crissy encourages users to share their personal stories and experiences related to unconscious bias in the workplace, fostering a sense of community and empathy. Users can submit written narratives that highlight instances of bias they have encountered or witnessed. Similar to platforms like Reddit's 'Ask Me Anything' (AMA) format, Crissy could introduce AMA-style sessions where users can engage in live discussions with individuals who have faced or overcome unconscious bias challenges in their careers. This feature allows for the exchange of real-life experiences and insights, providing inspiration and practical strategies for others dealing with similar situations.",
+    image: 'https://images.unsplash.com/photo-1686488427892-a1df07ce041b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80',
     imageLabel: 'Image Text',
   },
+  {
+    title: 'Interactive Discussions and Voting System',
+    date: 'Nov 11',
+    description:
+      'Crissy incorporates an interactive discussion and voting system where users can post discussion topics related to unconscious bias in the workplace, and others can engage by commenting, asking questions, or sharing their perspectives. The platform allows users to upvote or downvote comments based on their relevance and contribution to the discussion. This system helps highlight valuable insights and encourages users to engage in thoughtful and meaningful conversations. It also provides a way to identify popular or trending topics, ensuring that the most relevant discussions receive greater visibility and participation.',
+    image: 'https://images.unsplash.com/photo-1682685794304-99d3d07c57d2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1372&q=80',
+    imageLabel: 'Image Text',
+  }
 ];
 
 const post1= "lorem ipsum dolor sit amet, consect"
@@ -61,29 +66,6 @@ const post3= "lorempixel lorem ipsum dolor sit amet"
 
 const posts = [post1, post2, post3];
 
-const sidebar = {
-  title: 'About',
-  description:
-    'Etiam porta sem malesuada magna mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.',
-  archives: [
-    { title: 'March 2020', url: '#' },
-    { title: 'February 2020', url: '#' },
-    { title: 'January 2020', url: '#' },
-    { title: 'November 1999', url: '#' },
-    { title: 'October 1999', url: '#' },
-    { title: 'September 1999', url: '#' },
-    { title: 'August 1999', url: '#' },
-    { title: 'July 1999', url: '#' },
-    { title: 'June 1999', url: '#' },
-    { title: 'May 1999', url: '#' },
-    { title: 'April 1999', url: '#' },
-  ],
-  social: [
-    { name: 'GitHub', icon: GitHubIcon },
-    { name: 'Twitter', icon: TwitterIcon },
-    { name: 'Facebook', icon: FacebookIcon },
-  ],
-};
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
@@ -96,7 +78,7 @@ export default function Blog() {
         <Header title="INSPIRE2023 CRISSY"  />
         <main>
           <MainFeaturedPost post={mainFeaturedPost} />
-          <Grid container spacing={4}>
+          <Grid container spacing={2}>
             {featuredPosts.map((post) => (
               <FeaturedPost key={post.title} post={post} />
             ))}
@@ -107,10 +89,10 @@ export default function Blog() {
           </Grid>
         </main>
       </Container>
-      <Footer
+      {/* <Footer
         title="Footer"
         description="Something here to give the footer a purpose!"
-      />
+      /> */}
     </ThemeProvider>
   );
 }
