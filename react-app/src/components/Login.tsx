@@ -10,19 +10,23 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { Container } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { auth } from "../backend/firebase"
 import { signInWithEmailAndPassword } from "firebase/auth"
+import { UserContext } from "../App";
+
 
 export default function LogIn() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const { user, setUser } = useContext(UserContext);
   const handleSubmit = (e) => {
     e.preventDefault();
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         console.log(userCredential);
         console.log('User signed in successfully!');
+        setUser(email);
         // Redirect to homepage
         navigate('/post');
       })
@@ -31,10 +35,9 @@ export default function LogIn() {
       });
   };
 
-
     const navigate = useNavigate();
      // react hook - navigate 
-    const onLoginClick = () => {handleSubmit()}
+    // const onLoginClick = () => {handleSubmit()}
      
   return (
     <Container component="main" maxWidth="lg">
