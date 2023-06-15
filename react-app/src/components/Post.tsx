@@ -6,7 +6,7 @@ import { PostItemProps } from "./PostItem";
 import CreatePost from "./CreatePost";
 import { Grid } from "@mui/material";
 import { UserContext } from "../App";
-import {LoadingSpinner} from "./Animation/LoadingSpinner";
+1import LoadingSpinner from "./Animation/LoadingSpinner";
 
 export default function Post() {
   const navigate = useNavigate();
