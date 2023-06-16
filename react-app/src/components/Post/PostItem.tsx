@@ -6,11 +6,9 @@ import {
   CardContent,
   Typography,
 } from "@mui/material";
-import axios from "axios";
-import { MouseEventHandler, useEffect, useState } from "react";
-import LikeButton from "./LikeButton";
-import CommentSection from "./CommentSection";
-import { useParams } from "react-router-dom";
+import { MouseEventHandler, useState } from "react";
+import LikeButton from "../LikeButton";
+import CommentSection from "../Comment/CommentSection";
 
 export interface PostItemProps extends PostItemBase {
   id: number;
@@ -29,7 +27,6 @@ function PostItem(props: PostItemProps) {
   const [showComment, setShowComment] = useState(false);
   const handleClick = () => {
     setShowComment(!showComment);
-    // console.log(showComment);
   };
   const formattedDate = new Date(props.createdAt).toLocaleString();
 
@@ -55,8 +52,10 @@ function PostItem(props: PostItemProps) {
           }}
         >
           <div>
+            
             <Typography variant="body2" color="text.secondary">
-              {props.username}
+              {/* i dun understand why this is breaKIINg the code but it is */}
+              {/* {props.username} */}
             </Typography>
           </div>
 

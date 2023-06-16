@@ -1,12 +1,12 @@
 import React, { ReactElement, useContext, useEffect, useState } from "react";
 import PostItem from "./PostItem";
 import { useNavigate } from "react-router-dom";
-import NavBar from "./NavBar";
+import NavBar from "../NavBar";
 import { PostItemProps } from "./PostItem";
 import CreatePost from "./CreatePost";
 import { Grid } from "@mui/material";
-import { UserContext } from "../App";
-import LoadingSpinner from "./Animation/LoadingSpinner";
+import { UserContext } from "../../App";
+import LoadingSpinner from "../Animation/LoadingSpinner";
 
 export default function Post() {
   const navigate = useNavigate();
@@ -58,13 +58,12 @@ export default function Post() {
       />
     );
   }
-
   return (
     <>
       <NavBar></NavBar>
-      <h1>{user}</h1>
+      {/* <h1>{user}</h1> */}
       <CreatePost onCreate={handleCreatePost} />
-      <Grid spacing={2} justifyContent="space-between" alignItems="center">
+      <Grid justifyContent="space-between" alignItems="center">
         {postItems}
       </Grid>
     </>

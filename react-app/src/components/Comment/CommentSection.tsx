@@ -3,14 +3,16 @@ import { useParams } from "react-router-dom";
 import Comment from "./Comment";
 import { Key } from "react";
 import CreateComment from "./CreateComment";
-
+import LoadingSpinner from "../Animation/LoadingSpinner";
 const queryClient = new QueryClient();
 
 export default function App() {
   return (
+    <>
     <QueryClientProvider client={queryClient}>
       <CommentSection />
     </QueryClientProvider>
+    </>
   );
 }
 
@@ -61,9 +63,9 @@ function CommentSection() {
   };
 
 
-  if (isLoading) return "Loading...";
+  if (isLoading) return <LoadingSpinner />;;
 
-  if (error) return "An error has occurred: " + error.message;
+  if (error) return "An error has occurred: " + error;
 
   return (
     <>

@@ -8,9 +8,10 @@ import {
   TextField,
   Grid,
 } from "@mui/material";
-import React from "react";
+import React, { useContext } from "react";
 import { PostItemProps, PostItemBase } from "./PostItem";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { UserContext } from "../../App";
 
 interface CreatePostProps {
   onCreate: (newPost: PostItemProps) => void;
@@ -29,27 +30,22 @@ export default function CreatePost({ onCreate }: CreatePostProps) {
     const newPost: PostItemBase = {
       title,
       content,
-      username: "hi",
+      username: "username111",
       likes: 0,
     };
-
-    // fetch POST
-    // .then(data => onCreate(data))
-
     const requestOptions = {
       method: "POST",
       headers:{'Content-Type' : 'application/json'},
       body: JSON.stringify({
         title, 
         content, 
-        username: 'something123'})
+        username: "jasminelim" })
 
     };
     fetch('https://647087103de51400f7247096.mockapi.io/api/inspire2023/post', requestOptions)
       .then(response => response.json())
       .then(data =>  {
         onCreate(data);
-        
         setTitle("");
         setContent("");
         handleClose()
@@ -57,16 +53,6 @@ export default function CreatePost({ onCreate }: CreatePostProps) {
       })
     
     };
-
-  // const { isLoading, error, data } = useQuery("repoData", () =>
-  //   fetch(
-  //     `https://647087103de51400f7247096.mockapi.io/api/inspire2023/post/${id}/comment`
-  //   ).then((res) => res.json())
-  // );
-
-  // if (isLoading) return "Loading...";
-
-  // if (error) return "An error has occurred: " + error.message;
 
   const style = {
     position: "absolute" as "absolute",
@@ -132,7 +118,6 @@ export default function CreatePost({ onCreate }: CreatePostProps) {
             <Grid item xs={8}>
               <Button
                 variant="contained"
-                href="#contained-buttons"
                 sx={{ spacing: 1, marginTop: 2 }}
                 type="submit"
                 onClick={handleSubmit}

@@ -11,22 +11,32 @@ import Typography from "@mui/material/Typography";
 import { Container } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
-import { auth } from "../backend/firebase"
+import { auth, db } from "../backend/firebase"
 import { signInWithEmailAndPassword } from "firebase/auth"
 import { UserContext } from "../App";
+import { collection, doc, getDoc } from "firebase/firestore";
 
 
 export default function LogIn() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const { user, setUser } = useContext(UserContext);
+  const [ error, setError ] = useState("");
+
+  // When signed in, forward always to somewhere else
   const handleSubmit = (e) => {
     e.preventDefault();
     signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        console.log(userCredential);
+      .then((user) => {
+        console.log(user);
+        setEmail('');
+        setPassword('');
         console.log('User signed in successfully!');
         setUser(email);
+        // set the things to be retrieved from Firesttone
+        const docRef = doc(collection(db, "user"));
+        getDoc(docRef).then((data) => { console.log(data) });
+
         // Redirect to homepage
         navigate('/post');
       })
@@ -36,9 +46,7 @@ export default function LogIn() {
   };
 
     const navigate = useNavigate();
-     // react hook - navigate 
-    // const onLoginClick = () => {handleSubmit()}
-     
+
   return (
     <Container component="main" maxWidth="lg">
       

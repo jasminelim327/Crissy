@@ -1,16 +1,14 @@
-import Home from "./components/Home";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Profile from "./components/Profile";
-import Post from "./components/Post";
-import PostPage from "./components/PostPage";
+import Post from "./components/Post/Post";
+import PostPage from "./components/Post/PostPage";
 import NavBar from "./components/NavBar";
-import CommentSection from "./components/CommentSection";
+import CommentSection from "./components/Comment/CommentSection";
 import SignUp from "./components/SignUp";
 import LogIn from "./components/Login";
 import Blog from "./components/IntroductionPage/blog/Blog";
 import { createContext, useState } from "react";
 
-// /post/1
 interface UserContextInterface { 
   user: string;
   setUser: React.Dispatch<React.SetStateAction<string>>;
@@ -21,7 +19,6 @@ export const UserContext = createContext<UserContextInterface>({ user: "", setUs
 function App() {
   const [user, setUser] = useState("");
   // TODO create context provider
-
   return (
     <UserContext.Provider value={{ user, setUser }}>
       <div>
@@ -42,7 +39,5 @@ function App() {
       </div>
     </UserContext.Provider>
   );
-
 }
-
 export default App;

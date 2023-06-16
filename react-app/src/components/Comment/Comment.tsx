@@ -5,7 +5,7 @@ import {
   ListItemText,
   Typography,
 } from "@mui/material";
-import LikeButton from "./LikeButton";
+import LikeButton from "../LikeButton";
 
 export interface CommentProps {
   postId: string;

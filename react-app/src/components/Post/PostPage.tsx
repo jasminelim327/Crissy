@@ -1,7 +1,7 @@
 import { Navigate, useParams } from "react-router-dom";
 import PostItem, { PostItemProps } from "./PostItem";
 import { useEffect, useState } from "react";
-
+import LoadingSpinner from "../Animation/LoadingSpinner";
 
 const initialPost: PostItemProps = {
     id: 0,
@@ -27,6 +27,7 @@ const PostPage = () => {
         .then(data => {
             setPost(data);
             setIsLoading(false);
+            console.log(data);
         })
         .catch(error => {
             setError(error);
@@ -36,7 +37,7 @@ const PostPage = () => {
     }, [])
     
 if (isLoading) {
-    return <div>Page is loading</div>;
+    return <LoadingSpinner />;;
 }
 
 if (error) {
