@@ -7,7 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 import { MouseEventHandler, useState } from "react";
-import LikeButton from "../LikeButton";
+import LikeButton from "../Animation/LikeButton";
 import CommentSection from "../Comment/CommentSection";
 
 export interface PostItemProps extends PostItemBase {

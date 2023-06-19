@@ -4,8 +4,8 @@ import Post from "./components/Post/Post";
 import PostPage from "./components/Post/PostPage";
 import NavBar from "./components/NavBar";
 import CommentSection from "./components/Comment/CommentSection";
-import SignUp from "./components/SignUp";
-import LogIn from "./components/SignIn";
+import SignUp from "./components/SignupSignIn/SignUp";
+import LogIn from "./components/SignupSignIn/SignIn";
 import Blog from "./components/IntroductionPage/blog/Blog";
 import { createContext, useState } from "react";
 

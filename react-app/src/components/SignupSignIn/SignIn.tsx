@@ -11,9 +11,9 @@ import Typography from "@mui/material/Typography";
 import { Container, ThemeProvider, createTheme } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
-import { auth, db } from "../backend/firebase";
+import { auth, db } from "../../backend/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { UserContext } from "../App";
+import { UserContext } from "../../App";
 import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { BorderAllRounded } from "@mui/icons-material";
 

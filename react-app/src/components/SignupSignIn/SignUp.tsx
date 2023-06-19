@@ -12,7 +12,7 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import "firebase/firestore";
-import { auth, db } from "../backend/firebase";
+import { auth, db } from "../../backend/firebase";
 import { useNavigate } from "react-router-dom";
 import { setDoc, doc} from "firebase/firestore";
 
