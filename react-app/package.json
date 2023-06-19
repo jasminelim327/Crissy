@@ -21,8 +21,10 @@
     "markdown-to-jsx": "^7.2.1",
     "marked": "^5.0.5",
     "react": "^18.2.0",
+    "react-animated-text": "^0.1.4",
     "react-dom": "^18.2.0",
     "react-flip-toolkit": "^7.1.0",
+    "react-moving-text": "^0.0.7",
     "react-query": "^3.39.3",
     "react-router-dom": "^6.11.2"
   },

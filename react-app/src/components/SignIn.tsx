@@ -8,49 +8,72 @@ import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import { Container } from "@mui/material";
+import { Container, ThemeProvider, createTheme } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { auth, db } from "../backend/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { UserContext } from "../App";
 import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { BorderAllRounded } from "@mui/icons-material";
+
 
 export default function LogIn() {
+  // set email and password for storing and updating value within this component 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { user, setUser } = useContext(UserContext);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
+  const defaultTheme = createTheme();
 
-  // When signed in, forward always to somewhere else
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  // extract the values of user and setUser from the context.
+  const { user, setUser } = useContext(UserContext);
+
+  const handleSubmit = (e: { preventDefault: () => void; }) => {
+    e.preventDefault(); // Prevents the default form submission behavior
+
+    // Attempt to sign in with the provided email and password
     signInWithEmailAndPassword(auth, email, password)
       .then((user) => {
-        console.log(user);
-        setEmail("");
-        setPassword("");
+        console.log(user); //console.log the user object 
+        setEmail(""); //clear the email
+        setPassword(""); //clear the password
         console.log("User signed in successfully!");
-        setUser(email);
-        // set the things to be retrieved from Firesttone
-        // const docRef = doc(collection(db, "user", email, "post"));
+        
+        // set the things to be retrieved from Firesttone post collection
         getDocs(collection(db, "user", email, "post")).then((querySnapshot) => {
-          querySnapshot.forEach((query) => console.log(query.data()));
+          querySnapshot.forEach((query) => console.log(query.data())); //log each post datat
         });
+
+        setUser(email); // update the user value in the user context froom this form
 
         // Redirect to homepage
         navigate("/post");
       })
       .catch((error) => {
-        alert(error);
+        alert(error); // display eror message if there is error
       });
   };
 
-  const navigate = useNavigate();
 
   return (
-    <Container component="main" maxWidth="lg">
-      <Grid container>
+    <>
+    
+      <Container className="container"
+      sx={{
+    backgroundImage:
+      "url(https://images.unsplash.com/photo-1684151941972-2d456c0e2b3b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80)",
+      backgroundPosition: 'center',
+      backgroundSize: 'cover',
+    maxWidth:"xl",
+    height: "100vh",
+    width: '100vw',
+    margin: 0,
+    '@media (min-width: 1200px)': {
+      maxWidth: '1800px'}
+    
+  }}>
+      <Grid container  >
         <CssBaseline />
         <Grid
           item
@@ -59,17 +82,18 @@ export default function LogIn() {
           sm={4}
           md={7}
           sx={{
-            backgroundImage:
-              "url(https://images.unsplash.com/photo-1684151941972-2d456c0e2b3b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80)",
+            borderRadius: 4,
+            backgroundImage: "url(https://images.unsplash.com/photo-1684151941972-2d456c0e2b3b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80)",
             backgroundRepeat: "no-repeat",
-            backgroundColor: (t) =>
-              t.palette.mode === "light"
-                ? t.palette.grey[50]
-                : t.palette.grey[900],
+            backgroundColor: (t) => t.palette.mode === "light"
+              ? t.palette.grey[50]
+              : t.palette.grey[900],
             backgroundSize: "cover",
             backgroundPosition: "center",
-          }}
-        />
+            
+          }} />
+
+        {/* Sign In Form */}
         <Grid
           item
           mt={10}
@@ -79,6 +103,7 @@ export default function LogIn() {
           component={Paper}
           elevation={6}
           square
+          sx={{borderRadius:5}}
         >
           <Box
             sx={{
@@ -90,8 +115,10 @@ export default function LogIn() {
             }}
           >
             <Typography component="h1" variant="h5">
-              Welcome to Inspire 2023
+              
+              Welcome to Inspire Crissy 2023
             </Typography>
+
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
@@ -111,7 +138,7 @@ export default function LogIn() {
                 autoComplete="email"
                 autoFocus
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)} // Updates the email state variable
               />
               <TextField
                 margin="normal"
@@ -123,12 +150,11 @@ export default function LogIn() {
                 id="password"
                 autoComplete="current-password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)} // Updates the email state variable
               />
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-              />
+                label="Remember me" />
               <Button
                 onClick={handleSubmit}
                 type="submit"
@@ -137,17 +163,16 @@ export default function LogIn() {
                 sx={{
                   mt: 3,
                   mb: 2,
-                  background:
-                    "linear-gradient(45deg, #2196f3 30%, #00b0ff 90%)",
+                  background: "linear-gradient(45deg, #060D2C 30%, #4A5384 90%)",
                 }}
               >
                 Sign In
               </Button>
               <Grid container>
                 <Grid item xs>
-                  <Link href="#" variant="body2">
-                    Forgot password?
-                  </Link>
+                  {/* <Link href="#" variant="body2">
+      Forgot password?
+    </Link> */}
                 </Grid>
                 <Grid item>
                   <Link href="/signup" variant="body2">
@@ -160,5 +185,6 @@ export default function LogIn() {
         </Grid>
       </Grid>
     </Container>
+    </>
   );
 }

@@ -3,8 +3,6 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -13,11 +11,10 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import * as firebase from "firebase/app";
 import "firebase/firestore";
 import { auth, db } from "../backend/firebase";
 import { useNavigate } from "react-router-dom";
-import { setDoc, doc, getDoc } from "firebase/firestore";
+import { setDoc, doc} from "firebase/firestore";
 
 const defaultTheme = createTheme();
 
@@ -25,7 +22,9 @@ export default function SignUp() {
   const navigate = useNavigate();
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const signUp = (e) => {
+  const [username, setUsername] = React.useState("");
+
+  const signUp = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
@@ -35,6 +34,7 @@ export default function SignUp() {
         setDoc(doc(db, "user", email), {
           email,
           password,
+          username
         }).then((data) => {
           console.log("user saved")
         });
@@ -46,17 +46,30 @@ export default function SignUp() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
+          <Box
+        sx={{
+          backgroundImage: `url(https://images.unsplash.com/photo-1684151941972-2d456c0e2b3b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80)`,
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+          minHeight: "100vh", // Set the minimum height to cover the entire viewport
+          display: "flex",
+          alignItems: "center",
+        }}
+        >
+                  <CssBaseline />
+      <Container component="main" maxWidth="xs" sx ={{backgroundColor: '#FAF9F6', borderRadius: 5}} >
+
         <Box
           sx={{
-            marginTop: 8,
+            marginTop: 6,
+            marginBottom: 6,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
+            
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+          <Avatar sx={{ m: 1, bgcolor: "#000080"  }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
@@ -102,6 +115,20 @@ export default function SignUp() {
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </Grid>
+
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="username"
+                  label="Username"
+                  name="username"
+                  autoComplete="username"
+                  value={username}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </Grid>
+              
               <Grid item xs={12}>
                 <TextField
                   required
@@ -116,21 +143,16 @@ export default function SignUp() {
                 />
               </Grid>
               <Grid item xs={12}>
-                <FormControlLabel
-                  control={
-                    <Checkbox value="allowExtraEmails" color="primary" />
-                  }
-                  label="I want to receive inspiration, marketing promotions and updates via email."
-                />
+               
               </Grid>
             </Grid>
             <Button
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{ mt: 3, mb: 2 ,bgcolor: "navy"  }}
             >
-              Sign Up
+              Sign Up Now
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
@@ -142,6 +164,7 @@ export default function SignUp() {
           </Box>
         </Box>
       </Container>
+      </Box>
     </ThemeProvider>
   );
 }

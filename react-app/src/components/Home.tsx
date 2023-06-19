@@ -1,6 +1,6 @@
 import { Paper } from "@mui/material"
 import Profile from "./Profile"
-import Login from "./Login";
+import Login from "./SignIn";
 
 
 function Home () {
