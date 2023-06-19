@@ -15,6 +15,7 @@ import "firebase/firestore";
 import { auth, db } from "../../backend/firebase";
 import { useNavigate } from "react-router-dom";
 import { setDoc, doc} from "firebase/firestore";
+import { v4 as uuidv4 } from "uuid";
 
 const defaultTheme = createTheme();
 
@@ -23,6 +24,9 @@ export default function SignUp() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [username, setUsername] = React.useState("");
+  const [firstName, setfirstName] = React.useState("");
+  const [lastName, setLastName] = React.useState("");
+  const userId = uuidv4();
 
   const signUp = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -30,13 +34,18 @@ export default function SignUp() {
       .then((userCredential) => {
         alert("Successful Sign Up");
         navigate("../login");
-        // Add a new document in collection "cities"
+        // Add a new document in collection "users"
         setDoc(doc(db, "user", email), {
           email,
           password,
-          username
+          username, 
+          firstName,
+          lastName, 
+          userId,
+          
         }).then((data) => {
           console.log("user saved")
+          console.log(data);
         });
       })
       .catch((error) => {
@@ -56,7 +65,7 @@ export default function SignUp() {
           alignItems: "center",
         }}
         >
-                  <CssBaseline />
+      <CssBaseline />
       <Container component="main" maxWidth="xs" sx ={{backgroundColor: '#FAF9F6', borderRadius: 5}} >
 
         <Box
@@ -75,12 +84,14 @@ export default function SignUp() {
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
+
           <Box
             component="form"
             noValidate
             onSubmit={(e) => signUp(e)}
             sx={{ mt: 3 }}
           >
+
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -91,6 +102,8 @@ export default function SignUp() {
                   id="firstName"
                   label="First Name"
                   autoFocus
+                  value={firstName}
+                  onChange={(e) => setfirstName(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -101,21 +114,12 @@ export default function SignUp() {
                   label="Last Name"
                   name="lastName"
                   autoComplete="family-name"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
                 />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </Grid>
 
+                
+              </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
@@ -125,6 +129,19 @@ export default function SignUp() {
                   name="username"
                   autoComplete="username"
                   value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+              </Grid>
+
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email"
+                  name="email"
+                  autoComplete="email"
+                  value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </Grid>
@@ -150,7 +167,7 @@ export default function SignUp() {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 ,bgcolor: "navy"  }}
+              sx={{ mt: 3, mb: 2 ,background: "linear-gradient(45deg, #060D2C 30%, #4A5384 90%)"  }}
             >
               Sign Up Now
             </Button>
@@ -168,3 +185,4 @@ export default function SignUp() {
     </ThemeProvider>
   );
 }
+
