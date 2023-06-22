@@ -6,12 +6,14 @@ import {
   CardContent,
   Typography,
 } from "@mui/material";
-import { MouseEventHandler, useState } from "react";
+import { MouseEventHandler, useContext, useState } from "react";
 import LikeButton from "../Animation/LikeButton";
 import CommentSection from "../Comment/CommentSection";
+import { UserContext } from "../../App";
+import {firebase} from "firebase";
 
 export interface PostItemProps extends PostItemBase {
-  id: number;
+  id: string;
   onClick?: MouseEventHandler;
   createdAt: Date;
 }
@@ -21,24 +23,31 @@ export interface PostItemBase {
   content: string;
   username: string;
   likes: number;
+  createdAt: firebase.firestore.Timestamp;
 }
 
 function PostItem(props: PostItemProps) {
+  const { user, setUser } = useContext(UserContext);
   const [showComment, setShowComment] = useState(false);
+  
   const handleClick = () => {
     setShowComment(!showComment);
   };
-  const formattedDate = new Date(props.createdAt).toLocaleString();
+
+  const createdAtDate = new Date(1687168594 * 1000);
+  const dateset = createdAtDate.toLocaleDateString(); 
+  const formattedTime = createdAtDate.toLocaleTimeString();
+  const formattedDate = dateset + " "+formattedTime;
 
   return (
     <>
       <Card
         onClick={props.onClick}
         sx={{
-          maxWidth: 1000,
+          maxWidth: 1800,
           alignItems: "center",
           justifyContent: "space-between",
-          margin: 5,
+          margin: 2,
         }}
       >
         <CardContent
@@ -52,10 +61,8 @@ function PostItem(props: PostItemProps) {
           }}
         >
           <div>
-            
             <Typography variant="body2" color="text.secondary">
-              {/* i dun understand why this is breaKIINg the code but it is */}
-              {/* {props.username} */}
+              {props.username}
             </Typography>
           </div>
 
@@ -71,7 +78,7 @@ function PostItem(props: PostItemProps) {
             variant="h5"
             component="div"
           >
-            {props.title}
+            #{props.title}
           </Typography>
 
           <Typography variant="body2" color="text.secondary">

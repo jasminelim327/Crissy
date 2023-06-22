@@ -59,9 +59,11 @@ export default function CreatePost({ onCreate }: CreatePostProps) {
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: 400,
+    width: 800,
+    height:400,
     bgcolor: "background.paper",
-    border: "2px solid #000",
+    border: "0px solid #000",
+    borderRadius: 3,
     boxShadow: 24,
     padding: 2,
   };
@@ -98,8 +100,10 @@ export default function CreatePost({ onCreate }: CreatePostProps) {
               id="title-field"
               label="Title of your post"
               multiline
+             
               maxRows={4}
               variant="standard"
+              fullWidth
               onChange={(event) => setTitle(event.target.value)}
             />
 
@@ -111,7 +115,9 @@ export default function CreatePost({ onCreate }: CreatePostProps) {
               id="content-field"
               label="Body of your post"
               multiline
-              maxRows={4}
+              rows={5}
+              maxRows={10}
+              fullWidth
               variant="standard"
               onChange={(event) => setContent(event.target.value)}
             />
