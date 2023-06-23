@@ -11,6 +11,7 @@ import LikeButton from "../Animation/LikeButton";
 import CommentSection from "../Comment/CommentSection";
 import { UserContext } from "../../App";
 import {firebase} from "firebase";
+import { useNavigate } from "react-router-dom";
 
 export interface PostItemProps extends PostItemBase {
   id: string;
@@ -19,6 +20,7 @@ export interface PostItemProps extends PostItemBase {
 }
 
 export interface PostItemBase {
+  id: string;
   title: string;
   content: string;
   username: string;
@@ -29,20 +31,27 @@ export interface PostItemBase {
 function PostItem(props: PostItemProps) {
   const { user, setUser } = useContext(UserContext);
   const [showComment, setShowComment] = useState(false);
+  const navigate = useNavigate();
   
   const handleClick = () => {
     setShowComment(!showComment);
   };
 
-  const createdAtDate = new Date(1687168594 * 1000);
+  const createdAtTimestamp = props.createdAt;
+  const createdAtDate = createdAtTimestamp.toDate();
   const dateset = createdAtDate.toLocaleDateString(); 
   const formattedTime = createdAtDate.toLocaleTimeString();
   const formattedDate = dateset + " "+formattedTime;
 
+  const handleCardClick = () => {
+    // Navigate to the individual post page
+    navigate(`/post/${props.id}`);
+    console.log(props.id)
+  };
+
   return (
     <>
-      <Card
-        onClick={props.onClick}
+      <Card  onClick={handleCardClick}
         sx={{
           maxWidth: 1800,
           alignItems: "center",

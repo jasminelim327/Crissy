@@ -14,12 +14,14 @@ import { useContext, useState } from "react";
 import { auth, db } from "../../backend/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { UserContext } from "../../App";
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { BorderAllRounded } from "@mui/icons-material";
+import { initializeApp } from 'firebase/app';
+import { getFirestore, collection, getDocs, query, where, doc, getDoc } from 'firebase/firestore';
 
 
 export default function LogIn() {
   // set email and password for storing and updating value within this component 
+  const [username, setUsermame] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -41,21 +43,42 @@ export default function LogIn() {
         console.log("User signed in successfully!");
         
         // set the things to be retrieved from Firesttone post collection
-        getDocs(collection(db, "user", email, "post")).then((querySnapshot) => {
-          querySnapshot.forEach((query) => console.log(query.data())); //log each post datat
+        const userQuery = doc(collection(db, 'user'), email);
+
+        getDoc(userQuery)
+          .then((userDoc) => {
+            if (userDoc.exists()) {
+              const userData = userDoc.data();
+              const firstName = userData.firstName;
+              const lastName = userData.lastName;
+              const fullName = firstName + ' ' + lastName
+              console.log("Username:", username);
+
+        // getDocs(collection(db, "user", username, "post")).then((querySnapshot) => {
+        //   querySnapshot.forEach((query) => console.log(query.data())); //log each post datat
+        // });
+        
+        // Retrieve the posts from the Firestore post collection
+        const postQuery = query(collection(db, "post"));
+        getDocs(postQuery).then((postSnapshot) => {
+          postSnapshot.forEach((postDoc) => {
+            console.log("Post data:", postDoc.data());
+          });
         });
 
-        setUser(email); // update the user value in the user context froom this form
+        setUser(fullName); // update the user value in the user context froom this form
 
         // Redirect to homepage
         navigate("/post");
-      })
-      .catch((error) => {
-        alert(error); // display eror message if there is error
+        } else {
+          console.log("User not found.");
+        }
       });
-  };
-
-
+    })
+    .catch((error) => {
+      alert(error); // Display error message if there is an error
+    });
+};
   return (
     <>
       <Container className="container"

@@ -12,6 +12,9 @@ import React, { useContext } from "react";
 import { PostItemProps, PostItemBase } from "./PostItem";
 import { useParams } from "react-router-dom";
 import { UserContext } from "../../App";
+import { collection, addDoc, serverTimestamp, Timestamp } from 'firebase/firestore';
+import { db } from "../../backend/firebase";
+
 
 interface CreatePostProps {
   onCreate: (newPost: PostItemProps) => void;
@@ -22,37 +25,45 @@ export default function CreatePost({ onCreate }: CreatePostProps) {
   const [title, setTitle] = React.useState("");
   const [content, setContent] = React.useState("");
   const { id } = useParams();
+  const { user } = useContext(UserContext)
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const handleSubmit = () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault(); 
+
     const newPost: PostItemBase = {
       title,
       content,
-      username: "username111",
+      username: user,
       likes: 0,
+      createdAt: Timestamp.fromDate(new Date()),
+      id: ""
     };
-    const requestOptions = {
-      method: "POST",
-      headers:{'Content-Type' : 'application/json'},
-      body: JSON.stringify({
-        title, 
-        content, 
-        username: "jasminelim" })
 
-    };
-    fetch('https://647087103de51400f7247096.mockapi.io/api/inspire2023/post', requestOptions)
-      .then(response => response.json())
-      .then(data =>  {
-        onCreate(data);
-        setTitle("");
-        setContent("");
-        handleClose()
-        console.log(newPost);
-      })
-    
-    };
+    try {
+      // Save the new post to Firebase Firestore
+      const docRef = await addDoc(collection(db, "post"), newPost);
+
+      // Retrieve the newly generated post ID
+      const postId = docRef.id;
+
+      // Update the newPost object with the generated ID
+      newPost.id = postId;
+
+      // Call the onCreate callback with the new post
+      onCreate(newPost);
+
+      setTitle("");
+      setContent("");
+      handleClose();
+      console.log(newPost);
+    } catch (error) {
+      console.error("Error adding document: ", error);
+    }
+  };
+
 
   const style = {
     position: "absolute" as "absolute",

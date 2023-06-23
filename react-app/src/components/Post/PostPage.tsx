@@ -25,7 +25,6 @@ export default function Post() {
   const [error, setError] = useState("");
 
   // to have followers/ following kind of scenario - allow the user to follow the users and the post is based on the user they are following
-
   // add a new collection for follower
 
   //  when retrieving the posts, set a constraint to have following only posts
@@ -37,7 +36,7 @@ export default function Post() {
         //  before this, get the following of this user and then get the posts of 
         const querySnapshot = await getDocs(collection(db, "post"));
         const fetchedData = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
+        id: doc.id,
         createdAt: doc.data().createdAt,
         title: doc.data().title,
         content: doc.data().content,
@@ -48,7 +47,6 @@ export default function Post() {
         setPosts(fetchedData.reverse());
         setIsLoading(false);
       } catch (error) {
-        
         setError(error as string);
         console.log(error)
         setIsLoading(false);
@@ -66,12 +64,12 @@ export default function Post() {
   if (isLoading) {
     return <LoadingSpinner />;
   }
-
   if (error) {
     return <div>There's an error</div>;
   }
 
   for (let i = 0; i < posts.length; i++) {
+    
     postItems.push(
       <PostItem
         key={posts[i].id}

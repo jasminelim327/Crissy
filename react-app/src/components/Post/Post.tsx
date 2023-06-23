@@ -4,9 +4,12 @@ import { useNavigate } from "react-router-dom";
 import NavBar from "../NavBar";
 import { PostItemProps } from "./PostItem";
 import CreatePost from "./CreatePost";
-import { Grid } from "@mui/material";
+import { Box, Card, CardContent, Grid, Typography } from "@mui/material";
 import { UserContext } from "../../App";
 import LoadingSpinner from "../Animation/LoadingSpinner";
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from "../../backend/firebase";
+
 
 export default function Post() {
   const navigate = useNavigate();
@@ -15,20 +18,33 @@ export default function Post() {
   const [isLoading, setIsLoading] = useState(false);
   const [posts, setPosts] = useState<PostItemProps[]>([]);
   const [error, setError] = useState();
+  
 
   useEffect(() => {
     console.log("fetching data");
     setIsLoading(true);
-    fetch("https://647087103de51400f7247096.mockapi.io/api/inspire2023/post")
-      .then((response) => response.json())
-      .then((data) => {
-        setPosts(data.reverse());
+  
+    const fetchData = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "post"));
+        const fetchedData = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          createdAt: doc.data().createdAt,
+          title: doc.data().title,
+          content: doc.data().content,
+          username: doc.data().username,
+          likes: doc.data().likes
+        }));
+  
+        setPosts(fetchedData.reverse());
         setIsLoading(false);
-      })
-      .catch((error) => {
+      } catch (error) {
         setError(error);
         setIsLoading(false);
-      });
+      }
+    };
+  
+    fetchData();
   }, []);
 
   const handleCreatePost = (newPost: PostItemProps) => {
@@ -53,7 +69,7 @@ export default function Post() {
         username={posts[i].username}
         likes={posts[i].likes}
         // on click event -> create a path to the individual post - jasmine
-        onClick={() => navigate("/post/" + posts[i].id)}
+        onClick={() => navigate(`/post/${posts[i].id}`)}
         createdAt={posts[i].createdAt}
       />
     );
@@ -61,11 +77,34 @@ export default function Post() {
   return (
     <>
       <NavBar></NavBar>
-      {/* <h1>{user}</h1> */}
-      <CreatePost onCreate={handleCreatePost} />
+      <Box sx={{ display: "flex", justifyContent: "center", marginTop: 3}}>
+      <Card variant="outlined" sx={{border:'0px'}}>
+        <CardContent>
+          <Typography variant="h5" align="center" gutterBottom>
+            Hello, {user}
+          </Typography>
+          <Box
+            sx={{
+              borderTop: "0px solid ",
+              marginTop: 0,
+              paddingTop: 2,
+              color: "#666",
+            }}
+          >
+            <Typography variant="body2" align="center">
+              Unconscious bias affects decision-making in subtle ways. Stay
+              aware and challenge your assumptions.
+              <br></br>
+              <CreatePost onCreate={handleCreatePost} />
+            </Typography>
+          </Box>
+        </CardContent>
+      </Card>
+    </Box>
       <Grid justifyContent="space-between" alignItems="center">
         {postItems}
       </Grid>
+    
     </>
   );
 }
