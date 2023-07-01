@@ -1,6 +1,6 @@
 import React, { ReactElement, useContext, useEffect, useState } from "react";
 import PostItem from "./PostItem";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import NavBar from "../NavBar";
 import { PostItemProps } from "./PostItem";
 import CreatePost from "./CreatePost";
@@ -18,12 +18,24 @@ export default function Post() {
   const [isLoading, setIsLoading] = useState(false);
   const [posts, setPosts] = useState<PostItemProps[]>([]);
   const [error, setError] = useState();
-  
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredPosts, setFilteredPosts] = useState<PostItemProps[]>([]);
+
+
+  const filterPosts = (query: string) => {
+    const filtered = posts.filter(
+      (post) =>
+        post.title.toLowerCase().includes(query.toLowerCase()) ||
+        post.content.toLowerCase().includes(query.toLowerCase()) ||
+        post.username.toLowerCase().includes(query.toLowerCase())
+    );
+    setFilteredPosts(filtered);
+  };
 
   useEffect(() => {
     console.log("fetching data");
     setIsLoading(true);
-  
+
     const fetchData = async () => {
       try {
         const querySnapshot = await getDocs(collection(db, "post"));
@@ -35,7 +47,6 @@ export default function Post() {
           username: doc.data().username,
           likes: doc.data().likes
         }));
-  
         setPosts(fetchedData.reverse());
         setIsLoading(false);
       } catch (error) {
@@ -69,14 +80,26 @@ export default function Post() {
         username={posts[i].username}
         likes={posts[i].likes}
         // on click event -> create a path to the individual post - jasmine
-        onClick={() => navigate(`/post/${posts[i].id}`)}
+        onClick={() => navigate("/post/" + posts[i].id)}
         createdAt={posts[i].createdAt}
       />
     );
+    
   }
   return (
     <>
       <NavBar></NavBar>
+      <Box sx={{ display: "flex", justifyContent: "center", marginTop: 3 }}>
+      <input
+        type="text"
+        value={searchQuery}
+        onChange={(e) => {
+          setSearchQuery(e.target.value);
+          filterPosts(e.target.value);
+        }}
+      />
+    </Box>
+
       <Box sx={{ display: "flex", justifyContent: "center", marginTop: 3}}>
       <Card variant="outlined" sx={{border:'0px'}}>
         <CardContent>
@@ -101,10 +124,21 @@ export default function Post() {
         </CardContent>
       </Card>
     </Box>
-      <Grid justifyContent="space-between" alignItems="center">
-        {postItems}
-      </Grid>
-    
+    <Grid justifyContent="space-between" alignItems="center">
+      {searchQuery !== "" ? (
+        filteredPosts.map((post) => (
+          <Grid item key={post.id}>
+            <PostItem {...post} />
+          </Grid>
+        ))
+      ) : (
+        posts.map((post) => (
+          <Grid item key={post.id}>
+            <PostItem {...post} />
+          </Grid>
+        ))
+      )}
+    </Grid>
     </>
   );
 }

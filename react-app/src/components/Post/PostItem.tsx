@@ -11,7 +11,7 @@ import LikeButton from "../Animation/LikeButton";
 import CommentSection from "../Comment/CommentSection";
 import { UserContext } from "../../App";
 import {firebase} from "firebase";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export interface PostItemProps extends PostItemBase {
   id: string;
@@ -29,6 +29,7 @@ export interface PostItemBase {
 }
 
 function PostItem(props: PostItemProps) {
+  const { id } = useParams();
   const { user, setUser } = useContext(UserContext);
   const [showComment, setShowComment] = useState(false);
   const navigate = useNavigate();
@@ -48,7 +49,7 @@ function PostItem(props: PostItemProps) {
     navigate(`/post/${props.id}`);
     console.log(props.id)
   };
-
+  
   return (
     <>
       <Card  onClick={handleCardClick}
