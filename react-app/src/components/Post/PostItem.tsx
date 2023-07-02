@@ -58,6 +58,7 @@ function PostItem(props: PostItemProps) {
           alignItems: "center",
           justifyContent: "space-between",
           margin: 2,
+          borderRadius:6
         }}
       >
         <CardContent

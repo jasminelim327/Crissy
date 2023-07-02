@@ -84,7 +84,7 @@ export default function PostPage() {
   return (
     <>
       <NavBar />
-      <Box sx={{ display: "flex", justifyContent: "center", marginTop: 3 }}>
+      <Box >
         {post.map((post) => (
           <Grid item key={post.id}>
             <PostItem {...post} />

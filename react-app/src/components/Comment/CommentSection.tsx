@@ -1,9 +1,14 @@
 import { QueryClient, QueryClientProvider, useQuery, useMutation , useQueryClient} from "react-query";
 import { useParams } from "react-router-dom";
-import Comment from "./Comment";
-import { Key } from "react";
+import Comment, { CommentProps } from "./Comment";
+import {useEffect, useState } from "react";
 import CreateComment from "./CreateComment";
 import LoadingSpinner from "../Animation/LoadingSpinner";
+import "firebase/database";
+import { db } from "../../backend/firebase";
+import { addDoc, getDocs, collection } from "firebase/firestore";
+
+
 const queryClient = new QueryClient();
 
 export default function App() {
@@ -13,83 +18,65 @@ export default function App() {
       <CommentSection />
     </QueryClientProvider>
     </>
-  );
-}
+  );}
 
 function CommentSection() {
   const { id } = useParams();
-  const { isLoading, error, data } = useQuery("repoData", () =>
-    fetch(
-      `https://647087103de51400f7247096.mockapi.io/api/inspire2023/post/${id}/comment`
-    ).then((res) => res.json())
+  const [comments, setComments] = useState<CommentProps[]>([]);
 
-  );
+  const { isLoading, error, data } = useQuery(["comments", id], async () => {
+    const querySnapshot = await getDocs(collection(db, `/post/${id}/comment`));
+    console.log(data)
+    return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+  });
 
   const mutation = useMutation(
-    async (comment: string) => {
-      const requestOptions = {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          comment,
-        }),
-      };
-  
-      const response = await fetch(
-        `https://647087103de51400f7247096.mockapi.io/api/inspire2023/post/${id}/comment`,
-        requestOptions
-      );
-  
-      if (!response.ok) {
-        throw new Error("Failed to add comment");
-      }
+    async (newComment: CommentProps) => {
+      const docRef = await addDoc(collection(db, `post/${id}/comment`), newComment);
+      return docRef.id;
     },
     {
-      onSuccess: () => {
-        queryClient.invalidateQueries("repoData");
+      onSuccess: (commentId, newComment) => {
+        setComments((prevComments) => [
+          newComment,
+          ...prevComments,
+        ]);
       },
     }
   );
 
-  
-  const handleCommentSubmit = async (comment: string) => {
-    try {
-      await mutation.mutateAsync(comment);
-    } catch (error) {
-      console.error("Failed to add comment:", error);
-    }
+  const handleCommentSubmit = (newComment: CommentProps) => {
+    mutation.mutate(newComment);
   };
 
 
-  if (isLoading) return <LoadingSpinner />;;
+  useEffect(() => {
+    console.log("comments:", comments);
 
+    if (data) {
+      const initialComments = data.map((comment: any) => ({
+        id: comment.id,
+        comment: comment.comment,
+        likes: comment.likes,
+      }));
+      setComments(initialComments);
+      console.log(comments)
+    }
+  }, [data, id]);
+
+  if (isLoading) return <LoadingSpinner />;
   if (error) return "An error has occurred: " + error;
+  console.log("comments:", comments);
 
   return (
     <>
-      {data.map(
-        (comment: {
-          id: Key | null | undefined;
-          postId: string;
-          username: string;
-          comment: string;
-          avatar: string;
-          likes: number;
-        }) => (
-          <Comment
-            key={comment.id}
-            postId={comment.postId}
-            id={comment.id}
-            username={comment.username}
-            comment={comment.comment}
-            avatar={comment.avatar}
-            likes={comment.likes}
-          />
-        )
-      )}
-      <CreateComment onSubmit={handleCommentSubmit}/>
+     {comments.map((comment) => {
+      console.log('comment', comment.comment); // Add this line to log the comment object
+      return (
+        <Comment key={comment.id} comment={comment.comment} likes={comment.likes} id={comment.id}        />
+      );
+    })}
+      <CreateComment onSubmit={handleCommentSubmit} />
     </>
   );
 }

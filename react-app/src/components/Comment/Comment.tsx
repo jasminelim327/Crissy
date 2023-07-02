@@ -6,33 +6,29 @@ import {
   Typography,
 } from "@mui/material";
 import LikeButton from "../Animation/LikeButton";
+import { UserContext } from "../../App";
+import { useContext } from "react";
 
 export interface CommentProps {
-  postId: string;
   id: string;
-  username: string;
   comment: string;
-  avatar: string;
   likes: number;
 }
 
 function Comment(props: CommentProps) {
-  const id = props.id;
-  const username = props.username;
+  const { user } = useContext(UserContext)
   const comment = props.comment;
-  const postId = props.postId;
-  const avatar = props.avatar;
   const likes = props.likes;
 
   return (
     <>
       <ListItem alignItems="flex-start">
         <ListItemAvatar>
-          <Avatar alt="" src={avatar} />
+          <Avatar  />
         </ListItemAvatar>
 
         <ListItemText
-          primary={username}
+          primary={user}
           secondary={
             <>
               <Typography

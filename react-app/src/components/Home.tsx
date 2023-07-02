@@ -20,9 +20,7 @@ function Home () {
 };
  
     return (
-
     <>
-    
       <div className="Component" style={divStyle} >
       <Login></Login>
       </div>
