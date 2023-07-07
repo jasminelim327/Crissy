@@ -8,38 +8,61 @@ import {
 import LikeButton from "../Animation/LikeButton";
 import { UserContext } from "../../App";
 import { useContext } from "react";
+import { useParams } from "react-router-dom";
+import CommentLikeButton from "./CommentLike";
+import {firebase} from "firebase";
+
 
 export interface CommentProps {
-  id: string;
+  commentId: string;
   comment: string;
   likes: number;
+  username: string;
+  createdAt: firebase.firestore.Timestamp;
+
 }
 
 function Comment(props: CommentProps) {
-  const { user } = useContext(UserContext)
-  const comment = props.comment;
-  const likes = props.likes;
+  const { id } = useParams();
+  const { user, displayName } = useContext(UserContext);
+  const { commentId, comment, likes, username, createdAt } = props;
 
+  // const createdAtTimestamp = props.createdAt;
+  // const createdAtDate = createdAtTimestamp.toDate();
+  // const dateset = createdAtDate.toLocaleDateString(); 
+  // const formattedTime = createdAtDate.toLocaleTimeString();
+  // const formattedDate = dateset + " "+formattedTime;
+
+  console.log("comment:",  commentId); // Log the postId value
   return (
     <>
       <ListItem alignItems="flex-start">
         <ListItemAvatar>
-          <Avatar  />
+          <Avatar style={{ backgroundColor: "#99ddff" }}>
+          {username.charAt(0)}
+          </Avatar>
         </ListItemAvatar>
 
         <ListItemText
-          primary={user}
+         primaryTypographyProps={{
+          sx: {
+            fontSize: "14px",
+            color: "#66b5ff",
+          },
+        }}primary={`@${username}`}
+
+
           secondary={
             <>
               <Typography
                 sx={{ display: "inline" }}
                 component="span"
                 variant="body2"
-                color="text.primary"
+                color="#666666"
               >{comment}
               </Typography>
               <br />
-              <LikeButton likes={likes} />
+              <CommentLikeButton likes={likes} commentid={commentId}/>
             </>
           }
         />

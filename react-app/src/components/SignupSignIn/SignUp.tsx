@@ -10,12 +10,15 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from "firebase/auth";
 import "firebase/firestore";
 import { auth, db } from "../../backend/firebase";
 import { useNavigate } from "react-router-dom";
 import { setDoc, doc} from "firebase/firestore";
 import { v4 as uuidv4 } from "uuid";
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+import Alert from "@mui/material/Alert";
 
 const defaultTheme = createTheme();
 
@@ -27,38 +30,67 @@ export default function SignUp() {
   const [firstName, setfirstName] = React.useState("");
   const [lastName, setLastName] = React.useState("");
   const userId = uuidv4();
+  const [openToast, setOpenToast] = React.useState(false);
+const [toastMessage, setToastMessage] = React.useState('');
+const [toastSeverity, setToastSeverity] = React.useState('success');
+
+const handleToastClose = () => {
+  setOpenToast(false);
+};
 
   const signUp = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        alert("Successful Sign Up");
-        navigate("../login");
-        // Add a new document in collection "users"
-        setDoc(doc(db, "user", email), {
-          email,
-          password,
-          username, 
-          firstName,
-          lastName, 
-          userId,
-          
-        }).then((data) => {
-          console.log("user saved")
-          console.log(data);
+        const user = userCredential.user;
+        // alert("Successful Sign Up");
+        setToastMessage('Successful Sign Up');
+        setToastSeverity('success');
+        setOpenToast(true);
+        setTimeout(() => {
+          navigate("../login");
+        }, 2000);
+  
+        updateProfile(user, {
+          displayName: firstName + " " + lastName ,
+        })
+        .then(() => {
+          console.log("Profile updated successfully");
+
+          // Step 3: Send email verification
+          if (auth.currentUser) {
+            sendEmailVerification(auth.currentUser)
+              .then(() => {
+                
+                console.log("Email verification sent");
+              })
+              .catch((error) => {
+                
+                console.log("Error sending email verification:", error);
+              });
+          }
+        })
+        .catch((error) => {
+          setToastMessage('Error  updating profile: ' + error);
+      setToastSeverity('error');
+      setOpenToast(true);
         });
-      })
-      .catch((error) => {
-        alert(error);
-      });
-  };
+    })
+    .catch((error) => {
+      setToastMessage('Error  updating profile: ' + error);
+      setToastSeverity('error');
+      setOpenToast(true);
+    });
+};
 
   return (
+    <>
     <ThemeProvider theme={defaultTheme}>
           <Box
         sx={{
-          backgroundImage: `url(https://images.unsplash.com/photo-1684151941972-2d456c0e2b3b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80)`,
+          // backgroundImage: `url(https://images.unsplash.com/photo-1684151941972-2d456c0e2b3b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80)`,
           backgroundRepeat: "no-repeat",
+          backgroundColor:'#99ceff',
           backgroundSize: "cover",
           minHeight: "100vh", // Set the minimum height to cover the entire viewport
           display: "flex",
@@ -66,7 +98,7 @@ export default function SignUp() {
         }}
         >
       <CssBaseline />
-      <Container component="main" maxWidth="xs" sx ={{backgroundColor: '#FAF9F6', borderRadius: 5}} >
+      <Container component="main" maxWidth="xs" sx ={{backgroundColor: '#FAF9F6', borderRadius: 10}} >
 
         <Box
           sx={{
@@ -78,7 +110,7 @@ export default function SignUp() {
             
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "#000080"  }}>
+          <Avatar sx={{ m: 1, bgcolor: "#80c1ff"  }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
@@ -167,13 +199,13 @@ export default function SignUp() {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 ,background: "linear-gradient(45deg, #060D2C 30%, #4A5384 90%)"  }}
+              sx={{ mt: 3, mb: 2 ,background: '#80c1ff ', borderRadius:6 }}
             >
               Sign Up Now
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="/" variant="body2">
+                <Link href="/login" variant="body2">
                   Already have an account? Sign in
                 </Link>
               </Grid>
@@ -183,6 +215,23 @@ export default function SignUp() {
       </Container>
       </Box>
     </ThemeProvider>
+
+    <Snackbar
+        open={openToast}
+        autoHideDuration={3000}
+        onClose={handleToastClose}
+      >
+        <Alert
+          elevation={6}
+          variant="filled"
+          onClose={handleToastClose}
+          severity={toastSeverity}
+        >
+          {toastMessage}
+        </Alert>
+      </Snackbar>
+
+    </>
   );
 }
 

@@ -42,9 +42,9 @@ export default function Header(props: HeaderProps) {
         >
           {title}
         </Typography>
-        <IconButton>
+        {/* <IconButton>
           <SearchIcon />
-        </IconButton>
+        </IconButton> */}
         <Button variant="outlined" size="small" onClick={handleSignupClick}>
           Sign up
         </Button>

@@ -12,6 +12,7 @@ import CommentSection from "../Comment/CommentSection";
 import { UserContext } from "../../App";
 import {firebase} from "firebase";
 import { useNavigate, useParams } from "react-router-dom";
+import { AddComment, Padding, ThumbUpAlt, Title, TitleTwoTone, Topic, TopicOutlined, TopicSharp } from "@mui/icons-material";
 
 export interface PostItemProps extends PostItemBase {
   id: string;
@@ -23,14 +24,14 @@ export interface PostItemBase {
   id: string;
   title: string;
   content: string;
-  username: string;
+  username: string |null;
   likes: number;
   createdAt: firebase.firestore.Timestamp;
 }
 
 function PostItem(props: PostItemProps) {
   const { id } = useParams();
-  const { user, setUser } = useContext(UserContext);
+  const { user, displayName } = useContext(UserContext);
   const [showComment, setShowComment] = useState(false);
   const navigate = useNavigate();
   
@@ -48,17 +49,20 @@ function PostItem(props: PostItemProps) {
     // Navigate to the individual post page
     navigate(`/post/${props.id}`);
     console.log(props.id)
+    // comment
+    
   };
   
   return (
     <>
       <Card  onClick={handleCardClick}
         sx={{
-          maxWidth: 1800,
+          maxWidth: '75%',
           alignItems: "center",
-          justifyContent: "space-between",
-          margin: 2,
-          borderRadius:6
+    justifyContent: "center",
+    margin: "0 auto",
+    marginTop:2, 
+          borderRadius:7
         }}
       >
         <CardContent
@@ -72,36 +76,36 @@ function PostItem(props: PostItemProps) {
           }}
         >
           <div>
-            <Typography variant="body2" color="text.secondary">
-              {props.username}
+            <Typography variant="body2" color="#66b5ff" >
+              @{props.username}
             </Typography>
           </div>
 
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="body2" color="#66b5ff" >
             {formattedDate}
           </Typography>
         </CardContent>
 
-        <CardContent>
+        <CardContent >
           <Typography
             display="inline-block"
             gutterBottom
             variant="h5"
             component="div"
+            color={'#666666'}
           >
-            #{props.title}
+            {<TopicSharp />} {props.title}
           </Typography>
 
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="body2" color="#666666">
             {props.content}
           </Typography>
         </CardContent>
-        <CardActions>
+        <CardActions >
           {/* <Button size="small">Share</Button> */}
-
           {/* comment to display list of comment when clicked */}
-          <LikeButton likes={props.likes} />
-          <Button size="small" onClick={handleClick}>
+          <LikeButton likes={props.likes} postId={id} />
+          <Button size="small" startIcon={<AddComment />} onClick={handleClick} sx={{ color: '#66b5ff' }} >
             Comment
           </Button>
         </CardActions>

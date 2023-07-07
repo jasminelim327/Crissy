@@ -12,12 +12,14 @@ import { Container, ThemeProvider, createTheme } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { auth, db } from "../../backend/firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { User, UserCredential, signInWithEmailAndPassword } from "firebase/auth";
 import { UserContext } from "../../App";
 import { BorderAllRounded } from "@mui/icons-material";
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, getDocs, query, where, doc, getDoc } from 'firebase/firestore';
-
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+import Alert from "@mui/material/Alert";
 
 export default function LogIn() {
   // set email and password for storing and updating value within this component 
@@ -27,7 +29,13 @@ export default function LogIn() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const defaultTheme = createTheme();
-
+  const [openToast, setOpenToast] = useState(false);
+const [toastMessage, setToastMessage] = useState('');
+const [toastSeverity, setToastSeverity] = useState('success');
+  
+const handleToastClose = () => {
+  setOpenToast(false);
+};
   // extract the values of user and setUser from the context.
   const { user, setUser } = useContext(UserContext);
 
@@ -36,96 +44,71 @@ export default function LogIn() {
 
     // Attempt to sign in with the provided email and password
     signInWithEmailAndPassword(auth, email, password)
-      .then((user) => {
-        console.log(user); //console.log the user object 
+      .then((userCredential: UserCredential) => {
+        // User signed in successfully
+        const user = userCredential.user;
+        console.log("User:", user);
+
+
         setEmail(""); //clear the email
         setPassword(""); //clear the password
-        console.log("User signed in successfully!");
+        setToastMessage('User Signed in successfully');
+        setToastSeverity('success');
+        setOpenToast(true);
+
+        setUser(user);
+
+        setTimeout(() => {
+          navigate("../post");
+        }, 1500);
+      })
         
-        // set the things to be retrieved from Firesttone post collection
-        const userQuery = doc(collection(db, 'user'), email);
-
-        getDoc(userQuery)
-          .then((userDoc) => {
-            if (userDoc.exists()) {
-              const userData = userDoc.data();
-              const firstName = userData.firstName;
-              const lastName = userData.lastName;
-              const fullName = firstName + ' ' + lastName
-              console.log("Username:", username);
-
-        // getDocs(collection(db, "user", username, "post")).then((querySnapshot) => {
-        //   querySnapshot.forEach((query) => console.log(query.data())); //log each post datat
+      .catch((error) => {
+        // Error occurred during sign-in
+        setToastMessage("Error signing in: " + error.message);
+        setToastSeverity("error");
+        setOpenToast(true);
+      });
+  };
+        // // Retrieve the posts from the Firestore post collection
+        // const postQuery = query(collection(db, "post"));
+        // getDocs(postQuery).then((postSnapshot) => {
+        //   postSnapshot.forEach((postDoc) => {
+        //     console.log("Post data:", postDoc.data());
+        //   });
         // });
-        
-        // Retrieve the posts from the Firestore post collection
-        const postQuery = query(collection(db, "post"));
-        getDocs(postQuery).then((postSnapshot) => {
-          postSnapshot.forEach((postDoc) => {
-            console.log("Post data:", postDoc.data());
-          });
-        });
 
-        setUser(fullName); // update the user value in the user context froom this form
+        // const setUser: React.Dispatch<React.SetStateAction<User | null>> = useContext(UserContext);
 
         // Redirect to homepage
-        navigate("/post");
-        } else {
-          console.log("User not found.");
-        }
-      });
-    })
-    .catch((error) => {
-      alert(error); // Display error message if there is an error
-    });
-};
+        
   return (
     <>
-      <Container className="container"
-      sx={{
-    backgroundImage:
-      "url(https://images.unsplash.com/photo-1684151941972-2d456c0e2b3b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80)",
-      backgroundPosition: 'center',
-      backgroundSize: 'cover',
-    maxWidth:"xl",
-    height: "100vh",
-    width: '100vw',
-    margin: 0,
-    '@media (min-width: 1200px)': {
-      maxWidth: '1800px'}
-    
-  }}>
-      <Grid container  >
-        <CssBaseline />
-        <Grid
-          item
-          mt={10}
-          xs={false}
-          sm={4}
-          md={7}
-          sx={{
-            borderRadius: 4,
-            backgroundImage: "url(https://images.unsplash.com/photo-1684151941972-2d456c0e2b3b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80)",
-            backgroundRepeat: "no-repeat",
-            backgroundColor: (t) => t.palette.mode === "light"
-              ? t.palette.grey[50]
-              : t.palette.grey[900],
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            
-          }} />
-
+      <Box
+        sx={{
+          // backgroundImage: `url(https://images.unsplash.com/photo-1684151941972-2d456c0e2b3b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80)`,
+          backgroundRepeat: "no-repeat",
+          backgroundColor:'#cce6ff',
+          backgroundSize: "cover",
+          minHeight: "100vh", // Set the minimum height to cover the entire viewport
+          display: "flex",
+          alignItems: "center",
+          borderRadius:"0",
+            justifyContent:"center"
+        }}
+        >
         {/* Sign In Form */}
         <Grid
           item
-          mt={10}
+          mt={0}
           xs={12}
           sm={8}
-          md={5}
+          md={6}
           component={Paper}
-          elevation={6}
           square
-          sx={{borderRadius:5}}
+          elevation={3}
+          sx={{borderRadius:25}}
+          
         >
           <Box
             sx={{
@@ -134,15 +117,17 @@ export default function LogIn() {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
+              justifyContent: "center"
             }}
           >
-            <Typography component="h1" variant="h5">
+            <Typography component="h1" variant="h5" fontWeight={'bold'} color={"#66b5ff"}>
               
-              Welcome to Inspire Crissy 2023
+              Welcome to Crissy
             </Typography>
 
-            <Typography component="h1" variant="h5">
+            <Typography component="h2" variant="h5" fontWeight={'bold'} color={"#99ceff"}>
               Sign in
+              
             </Typography>
             <Box
               component="form"
@@ -185,7 +170,8 @@ export default function LogIn() {
                 sx={{
                   mt: 3,
                   mb: 2,
-                  background: "linear-gradient(45deg, #060D2C 30%, #4A5384 90%)",
+                  background: "#80c1ff",
+                  borderRadius:4
                 }}
               >
                 Sign In
@@ -205,8 +191,24 @@ export default function LogIn() {
             </Box>
           </Box>
         </Grid>
-      </Grid>
-    </Container>
+    </Box>
+
+    <Snackbar
+        open={openToast}
+        autoHideDuration={3000}
+        onClose={handleToastClose}
+      >
+        <Alert
+          elevation={6}
+          variant="filled"
+          onClose={handleToastClose}
+          severity={toastSeverity}
+        >
+          {toastMessage}
+        </Alert>
+      </Snackbar>
+
+  
     </>
   );
 }

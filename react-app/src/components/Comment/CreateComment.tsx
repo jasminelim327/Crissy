@@ -1,101 +1,131 @@
+import { useState, useContext } from "react";
 import {
   ListItem,
   ListItemAvatar,
   Avatar,
   ListItemText,
-  Typography,
   TextField,
-  ListItemIcon,
   Button,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
-import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { UserContext } from "../../App";
 import { Timestamp, addDoc, collection } from "firebase/firestore";
 import { db } from "../../backend/firebase";
+import { v4 as uuid } from "uuid";
 import { CommentProps } from "./Comment";
-
+import { AddComment } from "@mui/icons-material";
 
 interface CreateCommentProps {
-    onSubmit: (newComment: CommentProps) => void;
+  onSubmit: (newComment: CommentProps) => void;
+}
 
-  }
-
-function CreateComment({onSubmit}: CreateCommentProps) {
-  const [comment, setComment] = React.useState("");
-  const { user } = useContext(UserContext)
+function CreateComment({ onSubmit }: CreateCommentProps) {
+  const [comment, setComment] = useState("");
+  const { user, displayName } = useContext(UserContext);
   const { id } = useParams();
+  const displayNameValue = displayName || "";
+  const handleSnackbarClose = () => {
+    setShowSnackbar(false);
+  };
 
 
+  const [showSnackbar, setShowSnackbar] = useState(false);
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    console.log(user)
 
     
-
     const newComment = {
-      username: user,
+      username: displayNameValue,
       likes: 0,
       createdAt: Timestamp.fromDate(new Date()),
-      id: "", 
-      comment
+      commentId: uuid(), // Generate a unique ID for each comment
+      comment,
     };
 
-    try {
-    // Save the new post to Firebase Firestore
-    // const docRef = await addDoc(collection(db, `post/${id}/comment`), newComment);
-
-    // // Retrieve the newly generated post ID
-    // const commentId = docRef.id;
-
-    // // Update the newComment object with the generated ID
-    // newComment.id = commentId;
-
-    // Call the onCreate callback with the new comment
     onSubmit(newComment);
     setComment("");
-    console.log(newComment);
-  } catch (error) {
-    console.error("Error adding document: ", error);
-  }
+    setShowSnackbar(true);
+  
+  //   try {
+  //   const commentDocRef = await addDoc(
+  //     collection(db, `post/${id}/comment`),
+  //     newComment
+  //   );
+
+  //   // Set the ID of the new comment to the generated document ID
+  //   newComment.commentId = commentDocRef.id;
+
+  //   // Call the onSubmit callback with the new comment
+  //   onSubmit(newComment);
+
+  //   // Clear the comment input
+  //   setComment("");
+  // } catch (error) {
+  //   console.error("Error adding document: ", error);
+  // }
 };
+  
   return (
+    <>
     <ListItem alignItems="flex-start">
       <ListItemAvatar>
-        <Avatar />
-      </ListItemAvatar>
+          <Avatar style={{ backgroundColor: "#99ddff" }}>
+          {displayName.charAt(0)}
+          </Avatar>
+          </ListItemAvatar>
       <ListItemText
+        primaryTypographyProps={{
+          sx: {
+            fontSize: "14px",
+            color: "#66b5ff",
+          },
+        }}primary={`@${displayName}`}
 
-        primary={user}
         secondary={
           <>
             <TextField
               id="standard-textarea"
               label="Comment"
-              placeholder="Placeholder"
+              placeholder="Comment"
               multiline
               variant="standard"
-              value={comment} 
+              sx={{ width:'66%'}}
+              value={comment}
               onChange={(event) => setComment(event.target.value)}
-             
             />
-            <Button
-              variant="contained"
-              endIcon={<SendIcon />}
-              onClick={handleSubmit}
+            <Button 
+            size="small" 
+            sx={{ color: '#66b5ff' }}
+            startIcon={<AddComment />} 
+            onClick={handleSubmit}
             >
               Send
             </Button>
             <br />
             <br />
 
-            
+           
           </>
+
         }
       />
+      <Snackbar
+        open={showSnackbar}
+        autoHideDuration={3000} // Duration for which the snackbar is shown
+        onClose={handleSnackbarClose}
+      >
+        <Alert severity="success" onClose={handleSnackbarClose}>
+          Comment submitted successfully!
+        </Alert>
+        </Snackbar>
     </ListItem>
+    
+    </>
   );
+ 
 }
 
 export default CreateComment;

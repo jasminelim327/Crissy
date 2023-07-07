@@ -1,28 +1,57 @@
-import Button from "@mui/material/Button/Button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { doc, updateDoc } from 'firebase/firestore';
+import { db } from "../../backend/firebase";
+import { Button } from "@mui/material";
+import { useParams } from "react-router-dom";
+import { ThumbUpAlt } from "@mui/icons-material";
 
-function LikeButton(props: { likes: number }) {
-  // change of states will always be rerendered
-   const likes = props.likes
+function LikeButton(props: { likes: number, postId: string }) {
+  const { likes } = props;
+const {id} = useParams()
+  const [numberOfLikes, setNumberOfLikes] = useState(likes);
+  const [isLiked, setIsLiked] = useState(false);
 
-  const [numberOfLikes, setNumberOfLikes] = useState(likes); 
-  const [isLiked, setIsLiked] = useState(false); // google if initial value is // undefined
-  const handleLikeClick = () => {
-    if (isLiked) {
-      setNumberOfLikes(numberOfLikes - 1);
-    } else {
-      setNumberOfLikes(numberOfLikes + 1);
+  useEffect(() => {
+    const storedLikeStatus = localStorage.getItem(id);
+    if (storedLikeStatus === "true") {
+      setIsLiked(true);
     }
-    setIsLiked(!isLiked);
+  }, [id]);
+
+  const handleLikeClick = async () => {
+    try {
+      const postDocRef = doc(db, 'post', id);
+  
+      if (isLiked) {
+        setNumberOfLikes((prevLikes) => prevLikes - 1);
+        await updateDoc(postDocRef, {
+          likes: numberOfLikes - 1
+        });
+        localStorage.setItem(id, "false");
+      } else {
+        setNumberOfLikes((prevLikes) => prevLikes + 1);
+        await updateDoc(postDocRef, {
+          likes: numberOfLikes + 1
+        });
+        localStorage.setItem(id, "true");
+      }
+  
+      setIsLiked((prevIsLiked) => !prevIsLiked);
+    } catch (error) {
+      console.log('Error updating like count:', error);
+    }
   };
+
   return (
     <>
       <Button
         size="small"
-        variant={isLiked ? "contained" : "text"}
+        startIcon={<ThumbUpAlt />}
+        // variant={isLiked ? "contained" : "text"}
         onClick={handleLikeClick}
+        sx={{ color: isLiked ? '#cc0000' : '#66b5ff' }}
       >
-        {isLiked ? "Unlike" : "Like"} {numberOfLikes}
+       {isLiked ? "UPVOTED" : "Upvote"} {numberOfLikes}
       </Button>
     </>
   );

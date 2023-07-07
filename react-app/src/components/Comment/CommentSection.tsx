@@ -18,7 +18,8 @@ export default function App() {
       <CommentSection />
     </QueryClientProvider>
     </>
-  );}
+  )
+  ;}
 
 function CommentSection() {
   const { id } = useParams();
@@ -26,8 +27,7 @@ function CommentSection() {
 
   const { isLoading, error, data } = useQuery(["comments", id], async () => {
     const querySnapshot = await getDocs(collection(db, `/post/${id}/comment`));
-    console.log(data)
-    return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    return querySnapshot.docs.map((doc) => ({ commentId: doc.id, ...doc.data() }));
   });
 
   const mutation = useMutation(
@@ -36,46 +36,54 @@ function CommentSection() {
       return docRef.id;
     },
     {
-      onSuccess: (commentId, newComment) => {
-        setComments((prevComments) => [
-          newComment,
-          ...prevComments,
-        ]);
+      onSuccess: async () => {
+        const querySnapshot = await getDocs(collection(db, `/post/${id}/comment`));
+        const updatedComments = querySnapshot.docs.map((doc) => ({
+          commentId: doc.id,
+          ...doc.data(),
+        }));
+        setComments(updatedComments);
       },
     }
   );
 
   const handleCommentSubmit = (newComment: CommentProps) => {
     mutation.mutate(newComment);
-  };
-
+  }
 
   useEffect(() => {
-    console.log("comments:", comments);
-
     if (data) {
       const initialComments = data.map((comment: any) => ({
-        id: comment.id,
+        commentId: comment.commentId,
         comment: comment.comment,
         likes: comment.likes,
+        username: comment.username,
+        postId: { id } 
       }));
-      setComments(initialComments);
-      console.log(comments)
+
+      const sortedComments = initialComments.sort((a, b) => b.createdAt - a.createdAt);
+      setComments(sortedComments)
+      // setComments(initialComments);
     }
-  }, [data, id]);
+  }, [data]);
+
 
   if (isLoading) return <LoadingSpinner />;
   if (error) return "An error has occurred: " + error;
-  console.log("comments:", comments);
 
   return (
     <>
-     {comments.map((comment) => {
-      console.log('comment', comment.comment); // Add this line to log the comment object
-      return (
-        <Comment key={comment.id} comment={comment.comment} likes={comment.likes} id={comment.id}        />
-      );
-    })}
+    <div></div>
+      {comments.map((comment) => (
+        <Comment
+          key={comment.commentId}
+          comment={comment.comment}
+          likes={comment.likes}
+          commentId={comment.commentId}
+          username={comment.username}
+          postId= { id } 
+        />
+      ))}
       <CreateComment onSubmit={handleCommentSubmit} />
     </>
   );

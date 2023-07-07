@@ -15,6 +15,7 @@ import {
   getDoc,
   onSnapshot,
 } from "firebase/firestore";
+import CommentSection from "../Comment/CommentSection";
 
 export default function PostPage() {
   interface UserContextType {
@@ -24,17 +25,20 @@ export default function PostPage() {
 
   const navigate = useNavigate();
   const { id } = useParams();
-  const { user } = useContext(UserContext) as UserContextType;
+  const { user, displayName } = useContext(UserContext);
   const postItems: ReactElement[] = [];
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [post, setPost] = useState<PostItemProps[]>([]);
   const [error, setError] = useState("");
+  const [showComment, setShowComment] = useState(false);
 
+  
   // to have followers/ following kind of scenario - allow the user to follow the users and the post is based on the user they are following
   // add a new collection for follower
 
   //  when retrieving the posts, set a constraint to have following only posts
   // following button, -- maybe for future improvements
+ 
 
   useEffect(() => {
     const fetchData = async () => {
@@ -60,6 +64,7 @@ export default function PostPage() {
           setError("Post not found");
         }
         setIsLoading(false);
+        
       } catch (error) {
         setError(error as string);
         setIsLoading(false);
@@ -83,14 +88,16 @@ export default function PostPage() {
 
   return (
     <>
-      <NavBar />
-      <Box >
-        {post.map((post) => (
-          <Grid item key={post.id}>
-            <PostItem {...post} />
-          </Grid>
-        ))}
-      </Box>
-    </>
-  );
+    <NavBar />
+    <Box>
+      {post.map((post) => (
+        <Grid item key={post.id}>
+          <PostItem {...post} />
+        </Grid>
+        
+      ))}
+      
+    </Box>
+  </>
+);
 }

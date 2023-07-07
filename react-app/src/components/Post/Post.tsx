@@ -13,13 +13,22 @@ import { db } from "../../backend/firebase";
 
 export default function Post() {
   const navigate = useNavigate();
-  const { user } = useContext(UserContext);
+  const { user, displayName } = useContext(UserContext);
   const postItems: ReactElement[] = [];
   const [isLoading, setIsLoading] = useState(false);
   const [posts, setPosts] = useState<PostItemProps[]>([]);
   const [error, setError] = useState();
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredPosts, setFilteredPosts] = useState<PostItemProps[]>([]);
+  const [userDisplayName, setUserDisplayName] = useState<string | null>(
+    user ? user.displayName || "" : null
+  );
+ 
+  
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+    filterPosts(query);
+  };
 
 
   const filterPosts = (query: string) => {
@@ -27,7 +36,7 @@ export default function Post() {
       (post) =>
         post.title.toLowerCase().includes(query.toLowerCase()) ||
         post.content.toLowerCase().includes(query.toLowerCase()) ||
-        post.username.toLowerCase().includes(query.toLowerCase())
+        (post.username && post.username.toLowerCase().includes(query.toLowerCase()))
     );
     setFilteredPosts(filtered);
   };
@@ -47,7 +56,10 @@ export default function Post() {
           username: doc.data().username,
           likes: doc.data().likes
         }));
-        setPosts(fetchedData.reverse());
+        const sortedData = fetchedData.sort((a, b) =>
+        a.createdAt > b.createdAt ? -1 : 1
+      );
+      setPosts(sortedData);
         setIsLoading(false);
       } catch (error) {
         setError(error);
@@ -57,6 +69,12 @@ export default function Post() {
   
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      setUserDisplayName(user.displayName);
+    }
+  }, [user]);
 
   const handleCreatePost = (newPost: PostItemProps) => {
     setPosts((prevPosts) => [newPost, ...prevPosts]);
@@ -88,23 +106,16 @@ export default function Post() {
   }
   return (
     <>
-      <NavBar></NavBar>
+      <NavBar handleSearch={handleSearch}  />
       <Box sx={{ display: "flex", justifyContent: "center", marginTop: 3 }}>
-      <input
-        type="text"
-        value={searchQuery}
-        onChange={(e) => {
-          setSearchQuery(e.target.value);
-          filterPosts(e.target.value);
-        }}
-      />
+      
     </Box>
 
       <Box sx={{ display: "flex", justifyContent: "center", marginTop: 3}}>
       <Card variant="outlined" sx={{border:'0px'}}>
         <CardContent>
           <Typography variant="h5" align="center" gutterBottom>
-            Hello, {user}
+            Hello, {displayName}
           </Typography>
           <Box
             sx={{
@@ -125,6 +136,7 @@ export default function Post() {
       </Card>
     </Box>
     <Grid justifyContent="space-between" alignItems="center">
+
       {searchQuery !== "" ? (
         filteredPosts.map((post) => (
           <Grid item key={post.id}>

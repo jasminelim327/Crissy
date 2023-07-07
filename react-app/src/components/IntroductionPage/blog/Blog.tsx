@@ -1,28 +1,13 @@
 import CssBaseline from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
-import GitHubIcon from '@mui/icons-material/GitHub';
-import FacebookIcon from '@mui/icons-material/Facebook';
-import TwitterIcon from '@mui/icons-material/Twitter';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Header from './Header';
 import MainFeaturedPost from './MainFeaturedPost';
 import FeaturedPost from './FeaturedPost';
 import Main from './Main';
-import Footer from './Footer';
+import { Typography } from '@mui/material';
 
-const sections = [
-  { title: 'Technology', url: '#' },
-  { title: 'Design', url: '#' },
-  { title: 'Culture', url: '#' },
-  { title: 'Business', url: '#' },
-  { title: 'Politics', url: '#' },
-  { title: 'Opinion', url: '#' },
-  { title: 'Science', url: '#' },
-  { title: 'Health', url: '#' },
-  { title: 'Style', url: '#' },
-  { title: 'Travel', url: '#' },
-];
 
 const mainFeaturedPost = {
   title: 'Title of a longer featured blog post',
@@ -35,14 +20,14 @@ const mainFeaturedPost = {
 
 const featuredPosts = [
   {
-    title: 'Dynamic Discussion Forums:',
+    title: 'Dynamic Discussion Forum:',
     description:
       "Crissy's dynamic discussion forums serve as a virtual meeting place where individuals can engage in open and respectful conversations about unconscious bias in the workplace. These forums provide a platform for users to share their experiences, perspectives, and insights, fostering a sense of community and understanding. Whether it's discussing the impact of gender bias in hiring practices or addressing the challenges of racial bias in promotions, Crissy's discussion forums empower individuals to learn from one another, challenge their own biases, and collectively work towards creating more inclusive workplaces..",
     image: 'https://source.unsplash.com/random?wallpaper',
     imageLabel: 'Image Text',
   },
   {
-    title: 'Community-Driven Stories and Case Studies',
+    title: 'Community-Driven Stories',
     date: 'Nov 11',
     description:
      "Crissy encourages users to share their personal stories and experiences related to unconscious bias in the workplace, fostering a sense of community and empathy. Users can submit written narratives that highlight instances of bias they have encountered or witnessed. Similar to platforms like Reddit's 'Ask Me Anything' (AMA) format, Crissy could introduce AMA-style sessions where users can engage in live discussions with individuals who have faced or overcome unconscious bias challenges in their careers. This feature allows for the exchange of real-life experiences and insights, providing inspiration and practical strategies for others dealing with similar situations.",
@@ -75,7 +60,8 @@ export default function Blog() {
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
       <Container maxWidth="lg">
-        <Header title="INSPIRE2023 CRISSY"  />
+        <Header title={''} >
+      </Header>
         <main>
           <MainFeaturedPost post={mainFeaturedPost} />
           <Grid container spacing={2}>
@@ -84,7 +70,6 @@ export default function Blog() {
             ))}
           </Grid>
           <Grid container spacing={5} sx={{ mt: 3 }}>
-            <Main title="Welcome to INSPIRE 2023 - CRISSY " posts={posts} />
             
           </Grid>
         </main>
